@@ -2,12 +2,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const router_1 = require("./routers/router");
-const subdomains = require("express-subdomains");
 let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-subdomains.use('api');
-app.use(subdomains.middleware);
+// subdomains.use('api');
+// app.use(subdomains.middleware);
 app.use(router_1.router);
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
