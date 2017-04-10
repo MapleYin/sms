@@ -1,0 +1,17 @@
+{
+  "name": "SMSServer",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+  	"express": "~4.13.1",
+    "express-subdomains" : "*",
+    "express-jwt" : "*",
+    "jsonwebtoken" : "*",
+    "connect":"*",
+  	"mysql" : "*",
+    "node-cache" : "*",
+    "crypto-js" : "*",
+    "body-parser": "~1.13.2",
+    "multer" : "*"
+  }
+}
