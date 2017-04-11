@@ -7,7 +7,6 @@
     "express-subdomains" : "*",
     "express-jwt" : "*",
     "jsonwebtoken" : "*",
-    "connect":"*",
   	"mysql" : "*",
     "node-cache" : "*",
     "crypto-js" : "*",
