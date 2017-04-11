@@ -1,5 +1,5 @@
 "use strict";
 const express = require("express");
-// import {apiRouter} from './apiRouter'
+const apiRouter_1 = require("./apiRouter");
 exports.router = express.Router();
-// apiRouter(router);
+apiRouter_1.apiRouter(exports.router);

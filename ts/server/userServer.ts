@@ -1,5 +1,7 @@
 import {BaseServer,CreateBaseResponse,CreateErrorResponse,StatusCode} from "./baseServer"
 import CryptoJS = require('crypto-js');
+import {nodeCache} from '../util/cache'
+
 import {createToken,createRandomSecret} from '../util/token'
 
 class UserServer extends BaseServer{
@@ -65,13 +67,15 @@ class UserServer extends BaseServer{
 
 		try{
 			password = CryptoJS.SHA256(password).toString();
+			let secret = createRandomSecret(10);
 			let result = await this.query('INSERT INTO user SET ?',{
 				username:username,
 				password:password,
-				secret : createRandomSecret(10)
+				secret : secret
 			});
 			console.log(result);
 			if(result && result.insertId) {
+				nodeCache.set(username,secret);
 				return CreateBaseResponse<any>(null);
 			}else{
 				throw CreateErrorResponse(StatusCode.universal);

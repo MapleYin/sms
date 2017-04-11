@@ -1,18 +1,14 @@
 "use strict";
 const JsonWebTokenValidate = require("express-jwt");
 const JsonWebToken = require("jsonwebtoken");
-const NodeCache = require("node-cache");
+const cache_1 = require("./cache");
 const userServer_1 = require("../server/userServer");
-let nodeCache = new NodeCache({
-    stdTTL: 15 * 24 * 3600
-});
-let SECRET = 'v1.sms.maple.im';
 let EXPIRES = '15d';
 let options = {
     secret: (req, payload, done) => {
         var secret;
         if (payload && payload.username) {
-            secret = nodeCache.get(payload.username);
+            secret = cache_1.nodeCache.get(payload.username);
         }
         if (secret) {
             done(null, secret);
@@ -39,7 +35,7 @@ let options = {
 };
 exports.ValidateExpress = JsonWebTokenValidate(options);
 function createToken(username, secret) {
-    nodeCache.set(username, secret);
+    cache_1.nodeCache.set(username, secret);
     return JsonWebToken.sign({ username: username }, secret, {
         expiresIn: EXPIRES
     });

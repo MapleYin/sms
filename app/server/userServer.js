@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 const baseServer_1 = require("./baseServer");
 const CryptoJS = require("crypto-js");
+const cache_1 = require("../util/cache");
 const token_1 = require("../util/token");
 class UserServer extends baseServer_1.BaseServer {
     findById(userId) {
@@ -76,13 +77,15 @@ class UserServer extends baseServer_1.BaseServer {
             }
             try {
                 password = CryptoJS.SHA256(password).toString();
+                let secret = token_1.createRandomSecret(10);
                 let result = yield this.query('INSERT INTO user SET ?', {
                     username: username,
                     password: password,
-                    secret: token_1.createRandomSecret(10)
+                    secret: secret
                 });
                 console.log(result);
                 if (result && result.insertId) {
+                    cache_1.nodeCache.set(username, secret);
                     return baseServer_1.CreateBaseResponse(null);
                 }
                 else {

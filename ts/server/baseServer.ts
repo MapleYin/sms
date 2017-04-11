@@ -27,10 +27,8 @@ export class BaseServer{
 	 * SELECT [table] 
 	 */
 	protected select(){
+		
 	}
-
-
-
 
 	protected query(queryString:string,params?:any):Promise<any>{
 		console.log(queryString,params);

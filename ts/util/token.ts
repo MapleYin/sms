@@ -1,16 +1,14 @@
 import JsonWebTokenValidate = require("express-jwt");
 import JsonWebToken = require("jsonwebtoken");
 import * as express from "express";
-import NodeCache = require( "node-cache" );
+import {nodeCache} from './cache'
+
 import CryptoJS = require('crypto-js');
 import {userServer} from '../server/userServer';
 
 
-let nodeCache = new NodeCache({
-	stdTTL : 15 * 24 * 3600
-});
-let SECRET = 'v1.sms.maple.im';
 let EXPIRES = '15d';
+
 
 let options = {
 	secret : (req, payload, done)=>{
