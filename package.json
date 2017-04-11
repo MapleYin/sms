@@ -11,6 +11,5 @@
     "node-cache" : "*",
     "crypto-js" : "*",
     "body-parser": "~1.13.2",
-    "multer" : "*"
   }
 }
