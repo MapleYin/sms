@@ -1,5 +1,6 @@
 import {Base} from '../base'
-import {Select} from './select'
+import {Where} from './where'
+
 
 export class From extends Base{
 	constructor(parent:Base,params:string){
@@ -8,7 +9,12 @@ export class From extends Base{
 		this.table(params);
 	}
 
-	table(tableName:string){
+	private table(tableName:string){
 		this.push(tableName);
 	}
+
+	where(condition:string){
+		return new Where(this);
+	}
+
 }

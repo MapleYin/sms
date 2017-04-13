@@ -1,6 +1,9 @@
 import * as express from "express";
 import {ValidateExpress} from '../util/token'
 
+import UserServer = require("../server/userServer");
+
+
 
 export let apiRouter = function(router:express.Router){
 	router.get('/api/',function(req,res){
@@ -9,7 +12,6 @@ export let apiRouter = function(router:express.Router){
 
 	// authorize
 	router.post('/api/authorize',async function(req,res){
-		
 	});
 
 	// register

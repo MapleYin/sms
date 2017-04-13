@@ -1,3 +1,7 @@
 "use strict";
-const select_1 = require("./select/select");
-let select = select_1.Select('a,b');
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+__export(require("./select/select"));
+// let select = SQLMaker.Select('a,b');
+// select.into(SQLMaker.File.DUMP,'s'); 

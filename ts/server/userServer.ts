@@ -106,4 +106,4 @@ class UserServer extends BaseServer{
 	}
 
 }
-export let userServer = new UserServer();
+export = new UserServer();

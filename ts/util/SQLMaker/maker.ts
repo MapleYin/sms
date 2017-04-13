@@ -1,5 +1,5 @@
-import * as SQLMaker from './select/select'
+export * from './select/select'
 
-let select = SQLMaker.Select('a,b');
+// let select = SQLMaker.Select('a,b');
 
-select.into(SQLMaker.File.DUMP,'s');
+// select.into(SQLMaker.File.DUMP,'s');
