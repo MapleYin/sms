@@ -14,7 +14,7 @@ export class From extends Base{
 	}
 
 	where(condition:string){
-		return new Where(this);
+		// return new Where(this);
 	}
 
 }

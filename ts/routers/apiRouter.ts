@@ -21,12 +21,17 @@ export let apiRouter = function(router:express.Router){
 	});
 
     // need authorized
-	router.all('/api/*',ValidateExpress,function(req,res,next){
-		next();
-	});
+	// router.all('/api/*',ValidateExpress,function(req,res,next){
+	// 	next();
+	// });
 
-	router.post('/api/message',function(req,res){
-		MessageServer.get()
+	router.get('/api/message',async function(req,res){
+		try{
+			let result = await MessageServer.get();
+			res.json(result);
+		}catch(e){
+			res.json(e);
+		}
 	});
 
 	router.all('*',function(req,res){

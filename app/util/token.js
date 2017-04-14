@@ -2,7 +2,7 @@
 const JsonWebTokenValidate = require("express-jwt");
 const JsonWebToken = require("jsonwebtoken");
 const cache_1 = require("./cache");
-const userServer_1 = require("../server/userServer");
+const UserServer = require("../server/userServer");
 let EXPIRES = '15d';
 let options = {
     secret: (req, payload, done) => {
@@ -14,7 +14,7 @@ let options = {
             done(null, secret);
         }
         else {
-            let result = userServer_1.userServer.findByUserName(payload.username);
+            let result = UserServer.findByUserName(payload.username);
             result.then((result) => {
                 if (result && result.length > 0) {
                     let userInfo = result[0];

@@ -34,6 +34,8 @@ export class BaseServer{
 				if(!error) {
 					resolve(result);
 				}else{
+					console.log(queryString);
+					console.log(error);
 					reject(error);
 				}
 			});

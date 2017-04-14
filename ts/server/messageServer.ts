@@ -11,11 +11,13 @@ import * as Helper from '../util/helper'
 
 class MessageServer extends BaseServer {
 
-	async get(fromDate:Date);
-	async get(fromDate:Date,toDate:Date);
+	async get(fromDate:Date,limit?:number);
+	async get(fromDate:Date,toDate:Date,limit?:number);
 	async get(...ids:number[]);
 	async get(...formNumbers:string[]);
+	async get(limit:number,page?:number);
 	async get():Promise<IListResponse<any>>{
+		var sqlString = 'SELECT * FROM message WHERE ';
 		if(arguments.length == 1) {
 			let params = arguments[0];
 			if(Helper.isDate(params)) {
@@ -28,7 +30,6 @@ class MessageServer extends BaseServer {
 		}else if(arguments.length >= 2){
 			let params1 = arguments[0];
 			let params2 = arguments[1];
-			var sqlString = 'SELECT * FROM message WHERE ';
 			if(Helper.isDate(params1) && Helper.isDate(params2)) {
 				let startDate = params1 as Date;
 				let endDate = params2 as Date;
@@ -55,12 +56,19 @@ class MessageServer extends BaseServer {
 				});
 
 				sqlString += `fromAddress IN (${condition.join(',')})`;
+			}else{
+				throw CreateErrorResponse(StatusCode.invalidateParams);
 			}
 		}else{
 			sqlString += '1';
 		}
 		let result = await this.query(sqlString);
 		return CreateListResponse<any>(result);
+	}
+
+
+	post(content:string,date:Date,fromAddress:string){
+		var sqlString = 'INSERT '
 	}
 }
 

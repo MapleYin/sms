@@ -5,19 +5,29 @@ export enum StatusCode{
 	accountError = 101, // 账号或密码错误
 	accountExisted = 102,
 	missParams = 200,
+	invalidateParams = 201,
 
 	universal = 500
 }
 
-let message = {};
-message[StatusCode.success] = "ok";
-message[StatusCode.unauthorized] = "Unauthorized";
-message[StatusCode.accountError] = "Username or Password Error";
-message[StatusCode.accountExisted] = "UserName was existed";
-message[StatusCode.missParams] = "Miss Params";
-message[StatusCode.universal] = "Undefined Error";
 
-export let StatusMessage = message;
+let StatusMessage = {};
+StatusMessage[StatusCode.success] = "ok";
+
+StatusMessage[StatusCode.unauthorized] = "Unauthorized";
+StatusMessage[StatusCode.accountError] = "Username or Password Error";
+StatusMessage[StatusCode.accountExisted] = "UserName was existed";
+StatusMessage[StatusCode.missParams] = "Miss Params";
+StatusMessage[StatusCode.invalidateParams] = "Invalidate Params";
+
+StatusMessage[StatusCode.universal] = "Undefined Error";
+
+
+
+
+
+
+export {StatusMessage};
 
 
 export interface IBaseResponse<T>{
@@ -31,3 +41,11 @@ export interface IListResponse<T>{
 	message : string;
 	data : T[];
 }
+
+
+export interface IMessage{
+
+}
+
+
+

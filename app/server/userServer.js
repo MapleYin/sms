@@ -118,4 +118,4 @@ class UserServer extends baseServer_1.BaseServer {
         });
     }
 }
-exports.userServer = new UserServer();
+module.exports = new UserServer();

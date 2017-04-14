@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const token_1 = require("../util/token");
+const MessageServer = require("../server/messageServer");
 exports.apiRouter = function (router) {
     router.get('/api/', function (req, res) {
         res.json({ message: 'Welcome to Push Api!' });
@@ -23,10 +23,19 @@ exports.apiRouter = function (router) {
         });
     });
     // need authorized
-    router.all('/api/*', token_1.ValidateExpress, function (req, res, next) {
-        next();
-    });
-    router.post('/api/message', function (req, res) {
+    // router.all('/api/*',ValidateExpress,function(req,res,next){
+    // 	next();
+    // });
+    router.get('/api/message', function (req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let result = yield MessageServer.get();
+                res.json(result);
+            }
+            catch (e) {
+                res.json(e);
+            }
+        });
     });
     router.all('*', function (req, res) {
         res.sendStatus(404);

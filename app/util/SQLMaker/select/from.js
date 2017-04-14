@@ -1,6 +1,5 @@
 "use strict";
 const base_1 = require("../base");
-// import {Select} from './select'
 class From extends base_1.Base {
     constructor(parent, params) {
         super(parent);
@@ -9,6 +8,9 @@ class From extends base_1.Base {
     }
     table(tableName) {
         this.push(tableName);
+    }
+    where(condition) {
+        // return new Where(this);
     }
 }
 exports.From = From;
