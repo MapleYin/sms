@@ -4,7 +4,8 @@ import * as express from "express";
 import {nodeCache} from './cache'
 
 import CryptoJS = require('crypto-js');
-import {userServer} from '../server/userServer';
+import UserServer = require("../server/userServer");
+
 
 
 let EXPIRES = '15d';
@@ -19,7 +20,7 @@ let options = {
 		if(secret) {
 			done(null,secret);
 		}else{
-			let result = userServer.findByUserName(payload.username);
+			let result = UserServer.findByUserName(payload.username);
 			result.then((result)=>{
 				if(result && result.length > 0) {
 					let userInfo = result[0];

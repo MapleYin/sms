@@ -29,5 +29,5 @@ export interface IBaseResponse<T>{
 export interface IListResponse<T>{
 	code : StatusCode;
 	message : string;
-	data : [T];
+	data : T[];
 }

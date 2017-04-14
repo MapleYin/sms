@@ -1,9 +1,17 @@
 import {DBPool} from "../db/db";
-import {IBaseResponse,StatusCode,StatusMessage} from "./defined"
+import {IBaseResponse,IListResponse,StatusCode,StatusMessage} from "./defined"
 export * from "./defined"
 import SQLMaker = require('../util/SQLMaker/maker')
 
 export function CreateBaseResponse<T>(data:T):IBaseResponse<T>{
+	return {
+		code : StatusCode.success,
+		message : StatusMessage[StatusCode.success],
+		data : data
+	}
+};
+
+export function CreateListResponse<T>(data:T[]):IListResponse<T>{
 	return {
 		code : StatusCode.success,
 		message : StatusMessage[StatusCode.success],

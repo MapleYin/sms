@@ -2,6 +2,7 @@ import * as express from "express";
 import {ValidateExpress} from '../util/token'
 
 import UserServer = require("../server/userServer");
+import MessageServer = require("../server/messageServer");
 
 
 
@@ -25,7 +26,7 @@ export let apiRouter = function(router:express.Router){
 	});
 
 	router.post('/api/message',function(req,res){
-		
+		MessageServer.get()
 	});
 
 	router.all('*',function(req,res){
