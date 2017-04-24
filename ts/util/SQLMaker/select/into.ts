@@ -25,12 +25,12 @@ export class Into extends Base{
 		}
 	}
 
-	outFile(filePath:string){
+	private outFile(filePath:string){
 		this.push('OUTFILE');
 		this.push(filePath);
 	}
 
-	dumpFile(filePath:string){
+	private dumpFile(filePath:string){
 		this.push('DUMPFILE');
 		this.push(filePath);
 	}

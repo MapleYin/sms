@@ -36,21 +36,11 @@ class SelectMaker extends Base{
 	into(...params:any[]):Into{
 		return new Into(this,params);
 	}
-	intoFile(fileName:string){
-		this.push('INTO OUTFILE');
-		this.push(fileName);
-		return this;
-	}
-	intoDumpFile(fileName:string){
-		this.push('INTO DUMPFILE');
-		this.push(fileName);
-		return this;
-	}
 
 	// Form
 	from(tableName:string):From;
 	from(subQuery:SelectMaker):From;
-	from(params):any{
+	from(params):From{
 		if(typeof params == 'string' ) {
 			return new From(this,params as string);
 		}else{

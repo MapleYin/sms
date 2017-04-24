@@ -51,19 +51,19 @@ class MessageServer extends baseServer_1.BaseServer {
                     });
                     sqlString += `fromAddress IN (${condition.join(',')})`;
                 }
+                else {
+                    throw baseServer_1.CreateErrorResponse(baseServer_1.StatusCode.invalidateParams);
+                }
             }
             else {
                 sqlString += '1';
             }
-            console.log(sqlString);
-            try {
-                let result = yield this.query(sqlString);
-                return baseServer_1.CreateListResponse(result);
-            }
-            catch (e) {
-                throw e;
-            }
+            let result = yield this.query(sqlString);
+            return baseServer_1.CreateListResponse(result);
         });
+    }
+    post(content, date, fromAddress) {
+        var sqlString = 'INSERT ';
     }
 }
 module.exports = new MessageServer();

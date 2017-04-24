@@ -10,4 +10,5 @@ export class Where extends Base{
 	private expr(exprString){
 		this.push(exprString);
 	}
+	
 }

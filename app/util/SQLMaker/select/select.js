@@ -20,18 +20,8 @@ class SelectMaker extends base_1.Base {
     as(...aliasNames) {
         return this;
     }
-    into(...params) {
-        return new into_1.Into(this, params);
-    }
-    intoFile(fileName) {
-        this.push('INTO OUTFILE');
-        this.push(fileName);
-        return this;
-    }
-    intoDumpFile(fileName) {
-        this.push('INTO DUMPFILE');
-        this.push(fileName);
-        return this;
+    into() {
+        return new into_1.Into(this, arguments);
     }
     from(params) {
         if (typeof params == 'string') {
