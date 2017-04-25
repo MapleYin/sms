@@ -1,5 +1,6 @@
 export * from './select/select'
 
-// let select = SQLMaker.Select('a,b');
+// import {FileType,Select} from './select/select'
 
-// select.into(SQLMaker.File.DUMP,'s');
+// test
+

@@ -28,6 +28,7 @@ export function CreateErrorResponse(errorCode:StatusCode,message?:string):IBaseR
 }
 
 export class BaseServer{
+	protected SQLMaker = SQLMaker;
 	protected query(queryString:string,params?:any):Promise<any>{
 		return new Promise(function(resolve,reject){
 			DBPool.query(queryString,params,function(error,result,fields){

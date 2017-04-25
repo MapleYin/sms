@@ -11,57 +11,58 @@ import * as Helper from '../util/helper'
 
 class MessageServer extends BaseServer {
 
-	async get(fromDate:Date,limit?:number);
-	async get(fromDate:Date,toDate:Date,limit?:number);
-	async get(...ids:number[]);
-	async get(...formNumbers:string[]);
 	async get(limit:number,page?:number);
+	async get(fromDate:Date,limit?:number,page?:number);
+	async get(fromDate:Date,toDate:Date,limit?:number,page?:number);
 	async get():Promise<IListResponse<any>>{
-		var sqlString = 'SELECT * FROM message WHERE ';
-		if(arguments.length == 1) {
-			let params = arguments[0];
-			if(Helper.isDate(params)) {
-				
-			}else if(Helper.isNumber(params)){
+		let selectMaker = this.SQLMaker.Select();
+		let table = selectMaker.from('message');
+		var condition:string = '1';
 
-			}else if(Helper.isString(params)){
-
+		switch (arguments.length) {
+			case 0:
+				table.where('1');
+				break;
+			case 1:{
+				let params = arguments[0];
+				if(Helper.isNumber(params)) {
+					table.where('1').limit(params);
+				}else if(Helper.isDate(params)) {
+					let startTime = params as Date;
+					table.where(`${startTime.getTime()} > date`);
+				}
 			}
-		}else if(arguments.length >= 2){
-			let params1 = arguments[0];
-			let params2 = arguments[1];
-			if(Helper.isDate(params1) && Helper.isDate(params2)) {
-				let startDate = params1 as Date;
-				let endDate = params2 as Date;
-				let condition = `${startDate.getTime()} > date AND ${startDate.getTime()} < date`;
-				sqlString += condition;
-			}else if(Helper.isNumber(params1)){
-				let condition = [];
-				let maybeIds = Array.prototype.slice.call(arguments,0) as any[];
-				maybeIds.forEach((value)=>{
-					if(Helper.isNumber(value)) {
-						condition.push(value);
-					}
-				});
-
-				sqlString += `id IN (${condition.join(',')})`;
-
-			}else if(Helper.isString(params1)){
-				let condition = [];
-				let maybeIds = Array.prototype.slice.call(arguments,0) as any[];
-				maybeIds.forEach((value)=>{
-					if(Helper.isString(value)) {
-						condition.push(value);
-					}
-				});
-
-				sqlString += `fromAddress IN (${condition.join(',')})`;
-			}else{
-				throw CreateErrorResponse(StatusCode.invalidateParams);
+				break;
+			case 2:{
+				let params1 = arguments[0];
+				let params2 = arguments[1];
+				if(Helper.isNumber(params1) && Helper.isNumber(params2)) {
+					table.where('1').limit(params1,params2);
+				}else if(Helper.isDate(params1) && Helper.isNumber(params2)){
+					let startTime = params1 as Date;
+					table.where(`${startTime.getTime()} > date`).limit(params2);
+				}
 			}
-		}else{
-			sqlString += '1';
+				break;
+			case 3:{
+				let startTime = arguments[0] as Date;
+				if(Helper.isDate(arguments[1])) {
+					let endTime = arguments[1] as Date;
+					table.where(`${startTime.getTime()} > date AND ${endTime.getTime()} < date`).limit(arguments[2]);
+				}else{
+					table.where(`${startTime.getTime()} > date`).limit(arguments[1],arguments[2]);
+				}
+			}
+				break;
+			case 4:{
+				let startTime = arguments[0] as Date;
+				let endTime = arguments[1] as Date;
+				table.where(`${startTime.getTime()} > date AND ${endTime.getTime()} < date`).limit(arguments[2],arguments[3]);
+				break;
+			}
 		}
+		let sqlString = selectMaker.toString();
+		console.log(sqlString)
 		let result = await this.query(sqlString);
 		return CreateListResponse<any>(result);
 	}

@@ -1,21 +1,23 @@
 export class Base{
-	private SQLStringArray:string[] = [];
-	constructor(SQLStart:string|Base){
-		var startString;
-		if(typeof SQLStart == 'string') {
-			startString = SQLStart as string;
-		}else{
-			let parent = SQLStart as Base;
-			startString = parent.currentSQL();
-		}
-		this.push(startString);
+	private SQLSplitArray:(string|number|Base)[] = [];
+	constructor(SQLStart:string){
+		this.push(SQLStart);
 	}
 
-	protected push(str:string){
-		this.SQLStringArray.push(str);
+	protected push(statement:string|number|Base){
+		this.SQLSplitArray.push(statement);
+		return statement;
 	}
 
-	protected currentSQL(){
-		return this.SQLStringArray.join(' ');
+	toString(){
+		let sqlArray:(string|number)[] = [];
+		this.SQLSplitArray.forEach((value)=>{
+			if(value instanceof Base) {
+				sqlArray.push(value.toString());
+			}else{
+				sqlArray.push(value);
+			}
+		});
+		return sqlArray.join(' ');
 	}
 }

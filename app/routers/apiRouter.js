@@ -29,10 +29,11 @@ exports.apiRouter = function (router) {
     router.get('/api/message', function (req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let result = yield MessageServer.get();
+                let result = yield MessageServer.get(new Date(), new Date(), 10, 2);
                 res.json(result);
             }
             catch (e) {
+                console.log(e);
                 res.json(e);
             }
         });

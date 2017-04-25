@@ -26,10 +26,12 @@ export let apiRouter = function(router:express.Router){
 	// });
 
 	router.get('/api/message',async function(req,res){
+
 		try{
-			let result = await MessageServer.get();
+			let result = await MessageServer.get(new Date(),new Date(),10,2);
 			res.json(result);
 		}catch(e){
+			console.log(e);
 			res.json(e);
 		}
 	});

@@ -6,9 +6,8 @@ var FileType;
     FileType[FileType["DUMP"] = 1] = "DUMP";
 })(FileType = exports.FileType || (exports.FileType = {}));
 class Into extends base_1.Base {
-    constructor(parent, params) {
-        super(parent);
-        this.push('INTO');
+    constructor(params) {
+        super('INTO');
         if (params.length > 0) {
             if (typeof params[0] == 'number') {
                 let fileType = params[0];

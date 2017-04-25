@@ -1,22 +1,24 @@
 "use strict";
 class Base {
     constructor(SQLStart) {
-        this.SQLStringArray = [];
-        var startString;
-        if (typeof SQLStart == 'string') {
-            startString = SQLStart;
-        }
-        else {
-            let parent = SQLStart;
-            startString = parent.currentSQL();
-        }
-        this.push(startString);
+        this.SQLSplitArray = [];
+        this.push(SQLStart);
     }
-    push(str) {
-        this.SQLStringArray.push(str);
+    push(statement) {
+        this.SQLSplitArray.push(statement);
+        return statement;
     }
-    currentSQL() {
-        return this.SQLStringArray.join(' ');
+    toString() {
+        let sqlArray = [];
+        this.SQLSplitArray.forEach((value) => {
+            if (value instanceof Base) {
+                sqlArray.push(value.toString());
+            }
+            else {
+                sqlArray.push(value);
+            }
+        });
+        return sqlArray.join(' ');
     }
 }
 exports.Base = Base;

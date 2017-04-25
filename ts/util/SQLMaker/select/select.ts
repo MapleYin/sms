@@ -5,7 +5,8 @@ import {Into,FileType} from './into'
 export {FileType};
 
 export let Select = (...selectExprs:string[]):SelectMaker=>{
-	return new (Function.prototype.call(SelectMaker,selectExprs));
+
+	return new SelectMaker(selectExprs);
 }
 
 export let CONCAT = (...concatStrings:string[])=>{
@@ -15,15 +16,17 @@ export let CONCAT = (...concatStrings:string[])=>{
 
 class SelectMaker extends Base{
 
-	private selectedColumn:string[];
-
-	constructor(...selectExprs:string[]){
+	constructor(params:any){
 		super('SELECT');
-		this.select.call(this,selectExprs);
+		this.select.apply(this,params);
 	}
 
 	private select(...selectExprs:string[]){
-		this.selectedColumn = selectExprs;
+		let selectExpr = '*';
+		if(selectExprs.length > 0) {
+			selectExpr = selectExprs.join(',');
+		}
+		this.push(selectExpr);
 	}
 
 	as(...aliasNames:string[]){
@@ -33,20 +36,22 @@ class SelectMaker extends Base{
 
 	into(...storedVariables:string[]):Into;
 	into(file:File,path:string):Into;
-	into(...params:any[]):Into{
-		return new Into(this,params);
+	into():Into{
+		let intoStatement = new Into(Array.prototype.slice.call(arguments,0));
+		return this.push(intoStatement) as Into;
 	}
 
 	// Form
-	from(tableName:string):From;
-	from(subQuery:SelectMaker):From;
-	from(params):From{
+	from(params:string|SelectMaker):From{
+		var from:From;
 		if(typeof params == 'string' ) {
-			return new From(this,params as string);
+			from = new From(params);
 		}else{
 			let subQuery = params as SelectMaker;
-			let queryString = subQuery.currentSQL();
-			return new From(this,'('+queryString+')');
+			let queryString = subQuery.toString();
+			from = new From('('+queryString+')');
 		}
+		this.push(from);
+		return from;
 	}
 }

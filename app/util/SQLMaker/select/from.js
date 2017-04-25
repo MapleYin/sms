@@ -1,16 +1,18 @@
 "use strict";
 const base_1 = require("../base");
+const where_1 = require("./where");
 class From extends base_1.Base {
-    constructor(parent, params) {
-        super(parent);
-        this.push('FROM');
+    constructor(params) {
+        super('FROM');
         this.table(params);
     }
     table(tableName) {
         this.push(tableName);
     }
     where(condition) {
-        // return new Where(this);
+        let where = new where_1.Where(condition);
+        this.push(where);
+        return where;
     }
 }
 exports.From = From;

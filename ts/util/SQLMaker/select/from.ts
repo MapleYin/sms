@@ -3,9 +3,8 @@ import {Where} from './where'
 
 
 export class From extends Base{
-	constructor(parent:Base,params:string){
-		super(parent);
-		this.push('FROM');
+	constructor(params:string){
+		super('FROM');
 		this.table(params);
 	}
 
@@ -13,8 +12,9 @@ export class From extends Base{
 		this.push(tableName);
 	}
 
-	where(condition:string){
-		return new Where(this,condition);
+	where(condition:string|Base){
+		let where = new Where(condition);
+		this.push(where);
+		return where;
 	}
-
 }

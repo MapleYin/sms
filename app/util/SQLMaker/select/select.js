@@ -4,33 +4,42 @@ const from_1 = require("./from");
 const into_1 = require("./into");
 exports.FileType = into_1.FileType;
 exports.Select = (...selectExprs) => {
-    return new (Function.prototype.call(SelectMaker, selectExprs));
+    return new SelectMaker(selectExprs);
 };
 exports.CONCAT = (...concatStrings) => {
     return 'CONCAT(' + concatStrings.join(',') + ')';
 };
 class SelectMaker extends base_1.Base {
-    constructor(...selectExprs) {
+    constructor(params) {
         super('SELECT');
-        this.select.call(this, selectExprs);
+        this.select.apply(this, params);
     }
     select(...selectExprs) {
-        this.selectedColumn = selectExprs;
+        let selectExpr = '*';
+        if (selectExprs.length > 0) {
+            selectExpr = selectExprs.join(',');
+        }
+        this.push(selectExpr);
     }
     as(...aliasNames) {
         return this;
     }
     into() {
-        return new into_1.Into(this, arguments);
+        let intoStatement = new into_1.Into(Array.prototype.slice.call(arguments, 0));
+        return this.push(intoStatement);
     }
+    // Form
     from(params) {
+        var from;
         if (typeof params == 'string') {
-            return new from_1.From(this, params);
+            from = new from_1.From(params);
         }
         else {
             let subQuery = params;
-            let queryString = subQuery.currentSQL();
-            return new from_1.From(this, '(' + queryString + ')');
+            let queryString = subQuery.toString();
+            from = new from_1.From('(' + queryString + ')');
         }
+        this.push(from);
+        return from;
     }
 }

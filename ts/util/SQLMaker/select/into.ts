@@ -4,9 +4,8 @@ export enum FileType{
 	OUT,DUMP
 }
 export class Into extends Base{
-	constructor(parent:Base,params:any[]){
-		super(parent);
-		this.push('INTO');
+	constructor(params:any[]){
+		super('INTO');
 		if(params.length > 0) {
 			if(typeof params[0] == 'number') {
 				let fileType = params[0] as FileType;
