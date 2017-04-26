@@ -7,6 +7,8 @@ import {
 	IListResponse
 } from "./baseServer"
 
+import SQLMaker = require('../util/SQLMaker/maker')
+
 import * as Helper from '../util/helper'
 
 class MessageServer extends BaseServer {
@@ -15,7 +17,8 @@ class MessageServer extends BaseServer {
 	async get(fromDate:Date,limit?:number,page?:number);
 	async get(fromDate:Date,toDate:Date,limit?:number,page?:number);
 	async get():Promise<IListResponse<any>>{
-		let selectMaker = this.SQLMaker.Select();
+		let selectMaker = SQLMaker.Select();
+		let ColumnExpr = SQLMaker.ColumnExpr;
 		let table = selectMaker.from('message');
 
 		switch (arguments.length) {
@@ -28,7 +31,7 @@ class MessageServer extends BaseServer {
 					table.where('1').limit(params);
 				}else if(Helper.isDate(params)) {
 					let startTime = params as Date;
-					table.where(`${startTime.getTime()} > date`);
+					table.where(ColumnExpr('date').lessThen(startTime.getTime()));
 				}
 			}
 				break;
@@ -39,7 +42,9 @@ class MessageServer extends BaseServer {
 					table.where('1').limit(params1,params2);
 				}else if(Helper.isDate(params1) && Helper.isNumber(params2)){
 					let startTime = params1 as Date;
-					table.where(`${startTime.getTime()} > date`).limit(params2);
+					table.where(
+						ColumnExpr('date').lessThen(startTime.getTime())
+					).limit(params2);
 				}
 			}
 				break;
@@ -47,16 +52,22 @@ class MessageServer extends BaseServer {
 				let startTime = arguments[0] as Date;
 				if(Helper.isDate(arguments[1])) {
 					let endTime = arguments[1] as Date;
-					table.where(`${startTime.getTime()} > date AND ${endTime.getTime()} < date`).limit(arguments[2]);
+					table.where(
+						ColumnExpr('date').greaterThen(startTime.getTime()).and('date').lessThen(endTime.getTime())
+					).limit(arguments[2]);
 				}else{
-					table.where(`${startTime.getTime()} > date`).limit(arguments[1],arguments[2]);
+					table.where(
+						ColumnExpr('date').greaterThen(startTime.getTime())
+					).limit(arguments[1],arguments[2]);
 				}
 			}
 				break;
 			case 4:{
 				let startTime = arguments[0] as Date;
 				let endTime = arguments[1] as Date;
-				table.where(`${startTime.getTime()} > date AND ${endTime.getTime()} < date`).limit(arguments[2],arguments[3]);
+				table.where(
+					ColumnExpr('date').greaterThen(startTime.getTime()).and('date').lessThen(endTime.getTime())
+				).limit(arguments[2],arguments[3]);
 				break;
 			}
 		}

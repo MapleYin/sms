@@ -11,10 +11,20 @@ class Relation extends Base{
 		super();
 	}
 
-	and(){
-		
+	and(column:string){
+		return this.operation('AND',column);
 	}
 
+	or(column:string){
+		return this.operation('OR',column);
+	}
+
+	private operation(operation:string,column:string){
+		let columnCompare = new ColumnCompare(column);
+		this.push(operation);
+		this.push(columnCompare);
+		return columnCompare;
+	}
 
 }
 
@@ -23,34 +33,28 @@ class ColumnCompare extends Base{
 		super(column);
 	}
 	// compare
-	greaterThen(){
+	greaterThen(value:string|number):Relation{
+		return this.opertion('>');
 	}
-	greaterThanOrEqualTo(){
+	greaterThanOrEqualTo(value:string|number):Relation{
+		return this.opertion('>=');
 	}
-	lessThen(){
+	lessThen(value:string|number):Relation{
+		return this.opertion('<');
 	}
-	lessThenOrEqualTo(){
+	lessThenOrEqualTo(value:string|number):Relation{
+		return this.opertion('<=');
 	}
-	equalTo(){
-	}
-
-}
-
-export class Where extends Base{
-	constructor(params:string|Base){
-		super('WHERE');
-		if(typeof params == 'string') {
-			this.expr(params);
-		}else{
-			this.expr(params.toString());
-		}
+	equalTo(value:string|number):Relation{
+		return this.opertion('=');
 	}
 
-	private expr(exprString:string){
-		this.push(exprString);
+	private opertion(operation:string){
+		let relation = new Relation();
+		this.push(operation);
+		this.push(relation);
+		return relation;
 	}
-
-	
 
 	// predicate
 	in(params:string[]|number[]|Base){
@@ -58,6 +62,17 @@ export class Where extends Base{
 		return this.push(inStatement);
 	}
 
+}
+
+export class Where extends Base{
+	constructor(params:string|Base){
+		super('WHERE');
+		this.expr(params);
+	}
+
+	private expr(exprString:string|Base){
+		this.push(exprString);
+	}
 
 	// next step
 	limit(rowCount:number);

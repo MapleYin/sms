@@ -4,6 +4,8 @@ const base_1 = require("../base");
 const from_1 = require("./from");
 const into_1 = require("./into");
 exports.FileType = into_1.FileType;
+var where_1 = require("./where");
+exports.ColumnExpr = where_1.ColumnExpr;
 exports.Select = (...selectExprs) => {
     return new SelectMaker(selectExprs);
 };

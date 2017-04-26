@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const db_1 = require("../db/db");
 const defined_1 = require("./defined");
 __export(require("./defined"));
-const SQLMaker = require("../util/SQLMaker/maker");
 function CreateBaseResponse(data) {
     return {
         code: defined_1.StatusCode.success,
@@ -34,9 +33,6 @@ function CreateErrorResponse(errorCode, message) {
 }
 exports.CreateErrorResponse = CreateErrorResponse;
 class BaseServer {
-    constructor() {
-        this.SQLMaker = SQLMaker;
-    }
     query(queryString, params) {
         return new Promise(function (resolve, reject) {
             db_1.DBPool.query(queryString, params, function (error, result, fields) {
