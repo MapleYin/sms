@@ -1,8 +1,11 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Base {
     constructor(SQLStart) {
         this.SQLSplitArray = [];
-        this.push(SQLStart);
+        if (SQLStart) {
+            this.push(SQLStart);
+        }
     }
     push(statement) {
         this.SQLSplitArray.push(statement);

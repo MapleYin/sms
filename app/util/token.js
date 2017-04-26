@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const JsonWebTokenValidate = require("express-jwt");
 const JsonWebToken = require("jsonwebtoken");
 const cache_1 = require("./cache");

@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const base_1 = require("../base");
 const where_1 = require("./where");
 class From extends base_1.Base {

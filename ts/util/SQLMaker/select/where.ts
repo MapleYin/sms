@@ -2,6 +2,40 @@ import {Base} from '../base'
 import {In} from './in'
 import {Limit} from './limit'
 
+export let ColumnExpr = (column:string)=>{
+	return new ColumnCompare(column);
+};
+
+class Relation extends Base{
+	constructor(){
+		super();
+	}
+
+	and(){
+		
+	}
+
+
+}
+
+class ColumnCompare extends Base{
+	constructor(column:string){
+		super(column);
+	}
+	// compare
+	greaterThen(){
+	}
+	greaterThanOrEqualTo(){
+	}
+	lessThen(){
+	}
+	lessThenOrEqualTo(){
+	}
+	equalTo(){
+	}
+
+}
+
 export class Where extends Base{
 	constructor(params:string|Base){
 		super('WHERE');
@@ -15,12 +49,17 @@ export class Where extends Base{
 	private expr(exprString:string){
 		this.push(exprString);
 	}
+
 	
+
+	// predicate
 	in(params:string[]|number[]|Base){
 		let inStatement = new In(params);
-		return this.push(inStatement);;
+		return this.push(inStatement);
 	}
 
+
+	// next step
 	limit(rowCount:number);
 	limit(rowCount:number,offset:number);
 	limit(){

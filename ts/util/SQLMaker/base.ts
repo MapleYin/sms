@@ -1,7 +1,9 @@
 export class Base{
 	private SQLSplitArray:(string|number|Base)[] = [];
-	constructor(SQLStart:string){
-		this.push(SQLStart);
+	constructor(SQLStart?:string){
+		if (SQLStart) {
+			this.push(SQLStart);
+		}
 	}
 
 	protected push(statement:string|number|Base){

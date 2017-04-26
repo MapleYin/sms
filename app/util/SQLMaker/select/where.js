@@ -1,7 +1,34 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const base_1 = require("../base");
 const in_1 = require("./in");
 const limit_1 = require("./limit");
+exports.ColumnExpr = (column) => {
+    return new ColumnCompare(column);
+};
+class Relation extends base_1.Base {
+    constructor() {
+        super();
+    }
+    and() {
+    }
+}
+class ColumnCompare extends base_1.Base {
+    constructor(column) {
+        super(column);
+    }
+    // compare
+    greaterThen() {
+    }
+    greaterThanOrEqualTo() {
+    }
+    lessThen() {
+    }
+    lessThenOrEqualTo() {
+    }
+    equalTo() {
+    }
+}
 class Where extends base_1.Base {
     constructor(params) {
         super('WHERE');
@@ -15,10 +42,10 @@ class Where extends base_1.Base {
     expr(exprString) {
         this.push(exprString);
     }
+    // predicate
     in(params) {
         let inStatement = new in_1.In(params);
         return this.push(inStatement);
-        ;
     }
     limit() {
         var limitStatement;

@@ -17,7 +17,6 @@ class MessageServer extends BaseServer {
 	async get():Promise<IListResponse<any>>{
 		let selectMaker = this.SQLMaker.Select();
 		let table = selectMaker.from('message');
-		var condition:string = '1';
 
 		switch (arguments.length) {
 			case 0:
@@ -69,7 +68,6 @@ class MessageServer extends BaseServer {
 
 
 	post(content:string,date:Date,fromAddress:string){
-		var sqlString = 'INSERT '
 	}
 }
 

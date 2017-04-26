@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const base_1 = require("../base");
 class Limit extends base_1.Base {
     constructor(rowCount, offset) {
@@ -14,7 +15,7 @@ class Limit extends base_1.Base {
         this.push(count);
     }
     rowCountWithOffset(count, offset) {
-        this.push(`${offset},${count}`);
+        this.push(`${offset * count},${count}`);
     }
 }
 exports.Limit = Limit;

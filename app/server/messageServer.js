@@ -14,7 +14,6 @@ class MessageServer extends baseServer_1.BaseServer {
         return __awaiter(this, arguments, void 0, function* () {
             let selectMaker = this.SQLMaker.Select();
             let table = selectMaker.from('message');
-            var condition = '1';
             switch (arguments.length) {
                 case 0:
                     table.where('1');
@@ -70,7 +69,6 @@ class MessageServer extends baseServer_1.BaseServer {
         });
     }
     post(content, date, fromAddress) {
-        var sqlString = 'INSERT ';
     }
 }
 module.exports = new MessageServer();
