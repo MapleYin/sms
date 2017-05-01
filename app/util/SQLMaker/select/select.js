@@ -24,13 +24,6 @@ class SelectMaker extends base_1.Base {
         }
         this.push(selectExpr);
     }
-    as(...aliasNames) {
-        return this;
-    }
-    into() {
-        let intoStatement = new into_1.Into(Array.prototype.slice.call(arguments, 0));
-        return this.push(intoStatement);
-    }
     // Form
     from(params) {
         var from;
@@ -43,6 +36,22 @@ class SelectMaker extends base_1.Base {
             from = new from_1.From('(' + queryString + ')');
         }
         this.push(from);
-        return from;
+        return this;
+    }
+    // Where
+    where(whereCondition) {
+        return this;
+    }
+    groupBy() {
+        return this;
+    }
+    having() {
+        return this;
+    }
+    orderBy() {
+        return this;
+    }
+    limit() {
+        return this;
     }
 }

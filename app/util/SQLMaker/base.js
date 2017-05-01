@@ -13,9 +13,7 @@ class Base {
     }
     toString() {
         let sqlArray = [];
-        console.log('toString');
         this.SQLSplitArray.forEach((value) => {
-            console.log(value);
             if (value instanceof Base) {
                 sqlArray.push(value.toString());
             }

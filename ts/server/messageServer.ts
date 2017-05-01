@@ -7,31 +7,33 @@ import {
 	IListResponse
 } from "./baseServer"
 
-import SQLMaker = require('../util/SQLMaker/maker')
+// import SQLMaker = require('../util/SQLMaker/maker')
 
 import * as Helper from '../util/helper'
 
 class MessageServer extends BaseServer {
 
-	async get(limit:number,page?:number);
+	async get(limit?:number,page?:number);
 	async get(fromDate:Date,limit?:number,page?:number);
 	async get(fromDate:Date,toDate:Date,limit?:number,page?:number);
 	async get():Promise<IListResponse<any>>{
-		let selectMaker = SQLMaker.Select();
-		let ColumnExpr = SQLMaker.ColumnExpr;
-		let table = selectMaker.from('message');
+		var SQLArray = [];
+		console.log(arguments);
+		console.log(arguments.length);
+		SQLArray.push('SELECT * FROM message WHERE');
 
 		switch (arguments.length) {
 			case 0:
-				table.where('1');
+				SQLArray.push('1');
 				break;
 			case 1:{
 				let params = arguments[0];
 				if(Helper.isNumber(params)) {
-					table.where('1').limit(params);
+					SQLArray.push('1');
+					SQLArray.push(`LIMIT ${params}`);
 				}else if(Helper.isDate(params)) {
 					let startTime = params as Date;
-					table.where(ColumnExpr('date').lessThen(startTime.getTime()));
+					SQLArray.push(`date > ${startTime.getTime()}`)
 				}
 			}
 				break;
@@ -39,12 +41,12 @@ class MessageServer extends BaseServer {
 				let params1 = arguments[0];
 				let params2 = arguments[1];
 				if(Helper.isNumber(params1) && Helper.isNumber(params2)) {
-					table.where('1').limit(params1,params2);
+					SQLArray.push('1');
+					SQLArray.push(`LIMIT ${params1*params2},${params1}`);
 				}else if(Helper.isDate(params1) && Helper.isNumber(params2)){
 					let startTime = params1 as Date;
-					table.where(
-						ColumnExpr('date').lessThen(startTime.getTime())
-					).limit(params2);
+					SQLArray.push(`date > ${startTime.getTime()}`);
+					SQLArray.push(`LIMIT ${params2}`);
 				}
 			}
 				break;
@@ -52,28 +54,27 @@ class MessageServer extends BaseServer {
 				let startTime = arguments[0] as Date;
 				if(Helper.isDate(arguments[1])) {
 					let endTime = arguments[1] as Date;
-					table.where(
-						ColumnExpr('date').greaterThen(startTime.getTime()).and('date').lessThen(endTime.getTime())
-					).limit(arguments[2]);
+					SQLArray.push(`date > ${startTime.getTime()} AND`);
+					SQLArray.push(`date < ${endTime.getTime()}`);
+					SQLArray.push(`LIMIT ${arguments[2]}`);
 				}else{
-					table.where(
-						ColumnExpr('date').greaterThen(startTime.getTime())
-					).limit(arguments[1],arguments[2]);
+					SQLArray.push(`date > ${startTime.getTime()}`);
+					SQLArray.push(`LIMIT ${arguments[2]*arguments[1]},${arguments[1]}`);
 				}
 			}
 				break;
 			case 4:{
 				let startTime = arguments[0] as Date;
 				let endTime = arguments[1] as Date;
-				table.where(
-					ColumnExpr('date').greaterThen(startTime.getTime()).and('date').lessThen(endTime.getTime())
-				).limit(arguments[2],arguments[3]);
+				SQLArray.push(`date > ${startTime.getTime()} AND`);
+				SQLArray.push(`date < ${endTime.getTime()}`);
+				SQLArray.push(`LIMIT ${arguments[3]*arguments[2]},${arguments[2]}`);
 				break;
 			}
 		}
-		let sqlString = selectMaker.toString();
-		console.log(sqlString)
-		let result = await this.query(sqlString);
+
+		console.log(SQLArray.join(' '))
+		let result = await this.query(SQLArray.join(' '));
 		return CreateListResponse<any>(result);
 	}
 

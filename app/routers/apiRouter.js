@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const dateExtension_1 = require("../util/dateExtension");
 const MessageServer = require("../server/messageServer");
 exports.apiRouter = function (router) {
     router.get('/api/', function (req, res) {
@@ -29,12 +30,32 @@ exports.apiRouter = function (router) {
     // });
     router.get('/api/message', function (req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            let query = req.query;
+            let params = [];
+            if (query.fromDate) {
+                let date = dateExtension_1.convertAnyToDate(query.fromDate);
+                if (date) {
+                    params.push(date);
+                }
+            }
+            if (query.endDate) {
+                let date = dateExtension_1.convertAnyToDate(query.endDate);
+                if (date) {
+                    params.push(date);
+                }
+            }
+            if (query.count && !isNaN(+query.count)) {
+                params.push(+query.count);
+            }
+            if (query.page && !isNaN(+query.count)) {
+                params.push(+query.page);
+            }
             try {
-                let result = yield MessageServer.get(new Date(), new Date(), 10, 2);
+                console.log(params);
+                let result = yield MessageServer.get.apply(this, params);
                 res.json(result);
             }
             catch (e) {
-                console.log(e);
                 res.json(e);
             }
         });

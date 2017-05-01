@@ -1,4 +1,4 @@
-
+// check
 
 export let isNumber = (maybeNumber)=>{
 	return typeof maybeNumber == 'number'
@@ -31,4 +31,3 @@ export let isMapObject = ()=>{
 export let isClass = (origin,target)=>{
 	return origin instanceof target
 }
-
