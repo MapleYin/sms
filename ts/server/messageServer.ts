@@ -76,6 +76,7 @@ class MessageServer extends BaseServer {
 
 
 	post(content:string,date:Date,fromAddress:string){
+		
 	}
 }
 

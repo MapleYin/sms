@@ -14,6 +14,10 @@ interface IUserInfo{
 let EXPIRES = '15d';
 
 
+// header 
+// authorization Bearer token
+
+
 let options = {
 	secret : (req, payload, done)=>{
 		var secret:string;
@@ -21,10 +25,6 @@ let options = {
 		if(payload && payload.username) {
 			let userInfo = nodeCache.get<IUserInfo>(payload.username);
 			secret = userInfo.secret;
-			ip = userInfo.ip;
-		}
-		if (req.ip != ip) {
-			done("invalidate token!",null);
 		}
 
 		if(secret) {
@@ -54,10 +54,7 @@ export let ValidateExpress = JsonWebTokenValidate(options);
 export function createToken(username:string,secret:string,ip:string){
 	nodeCache.set(username,{
 		secret : secret,
-		ip : ip
 	});
-
-	// save to db
 
 	return JsonWebToken.sign({username:username},secret,{
 		expiresIn : EXPIRES

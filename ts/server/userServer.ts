@@ -70,9 +70,11 @@ class UserServer extends BaseServer{
 
 		try{
 			password = CryptoJS.SHA256(password).toString();
+			let secret = createRandomSecret(10);
 			let result = await this.query('INSERT INTO user SET ?',{
 				username:username,
 				password:password,
+				secret : secret
 			});
 			console.log(result);
 			if(result && result.insertId) {
