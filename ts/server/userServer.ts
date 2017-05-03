@@ -16,21 +16,24 @@ class UserServer extends BaseServer{
 		return result;
 	}
 
-	async validateUser(username:string,password:string){
+	async validateUser(username:string,password:string,ip:string){
+		if (!username || !password) {
+			throw CreateErrorResponse(StatusCode.accountError);
+		}
 		password = CryptoJS.SHA256(password).toString();
 		try{
 			let result = await this.findBy(['username','password'],[username,password]);
 			if(result && result.length > 0) {
 				let info = result[0];
-				let token = createToken(info.username,info.secret);
+				let token = createToken(info.username,info.secret,ip);
 				return CreateBaseResponse<string>(token);
 			}else{
-				return CreateErrorResponse(StatusCode.accountError);
+				throw CreateErrorResponse(StatusCode.accountError);
 			}
 		}catch(e){
 			console.log("validateUser Error:");
 			console.log(e);
-			return CreateErrorResponse(StatusCode.accountError);;
+			throw CreateErrorResponse(StatusCode.accountError);
 		}
 		
 	}
@@ -67,15 +70,12 @@ class UserServer extends BaseServer{
 
 		try{
 			password = CryptoJS.SHA256(password).toString();
-			let secret = createRandomSecret(10);
 			let result = await this.query('INSERT INTO user SET ?',{
 				username:username,
 				password:password,
-				secret : secret
 			});
 			console.log(result);
 			if(result && result.insertId) {
-				nodeCache.set(username,secret);
 				return CreateBaseResponse<any>(null);
 			}else{
 				throw CreateErrorResponse(StatusCode.universal);
@@ -103,6 +103,11 @@ class UserServer extends BaseServer{
 		}
 		let result = await this.query(`SELECT * FROM user WHERE ${matchParams}`,value);
 		return result;
+	}
+
+
+	async updateUserInfo(username:string,modify:{[key:string]:any}){
+		return this.query('UPDATE ')
 	}
 
 }

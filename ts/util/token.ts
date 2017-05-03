@@ -6,17 +6,27 @@ import {nodeCache} from './cache'
 import CryptoJS = require('crypto-js');
 import UserServer = require("../server/userServer");
 
-
+interface IUserInfo{
+	secret : string,
+	ip : string
+}
 
 let EXPIRES = '15d';
 
 
 let options = {
 	secret : (req, payload, done)=>{
-		var secret;
+		var secret:string;
+		var ip:string;
 		if(payload && payload.username) {
-			secret = nodeCache.get<string>(payload.username);
+			let userInfo = nodeCache.get<IUserInfo>(payload.username);
+			secret = userInfo.secret;
+			ip = userInfo.ip;
 		}
+		if (req.ip != ip) {
+			done("invalidate token!",null);
+		}
+
 		if(secret) {
 			done(null,secret);
 		}else{
@@ -41,8 +51,14 @@ let options = {
 
 export let ValidateExpress = JsonWebTokenValidate(options);
 
-export function createToken(username:string,secret:string){
-	nodeCache.set(username,secret);
+export function createToken(username:string,secret:string,ip:string){
+	nodeCache.set(username,{
+		secret : secret,
+		ip : ip
+	});
+
+	// save to db
+
 	return JsonWebToken.sign({username:username},secret,{
 		expiresIn : EXPIRES
 	});

@@ -46,16 +46,16 @@ exports.apiRouter = function (router) {
             }
             if (query.count && !isNaN(+query.count)) {
                 params.push(+query.count);
-            }
-            if (query.page && !isNaN(+query.count)) {
-                params.push(+query.page);
+                if (query.page && !isNaN(+query.count)) {
+                    params.push(+query.page);
+                }
             }
             try {
-                console.log(params);
-                let result = yield MessageServer.get.apply(this, params);
+                let result = yield MessageServer.get.apply(MessageServer, params);
                 res.json(result);
             }
             catch (e) {
+                console.log(e);
                 res.json(e);
             }
         });

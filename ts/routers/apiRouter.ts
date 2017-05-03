@@ -14,6 +14,14 @@ export let apiRouter = function(router:express.Router){
 
 	// authorize
 	router.post('/api/authorize',async function(req,res){
+		let loginInfo = req.body;
+		try{
+			let result = UserServer.validateUser(loginInfo.username,loginInfo.password,req.ip);
+			res.json(result);
+		}catch(e){
+			console.log(e);
+			res.json(e);
+		}
 	});
 
 	// register
@@ -22,9 +30,9 @@ export let apiRouter = function(router:express.Router){
 	});
 
     // need authorized
-	// router.all('/api/*',ValidateExpress,function(req,res,next){
-	// 	next();
-	// });
+	router.all('/api/*',ValidateExpress,function(req,res,next){
+		next();
+	});
 
 	router.get('/api/message',async function(req,res){
 		let query = req.query;
@@ -42,17 +50,16 @@ export let apiRouter = function(router:express.Router){
 			}
 		}
 		if (query.count && !isNaN(+query.count)) {
-
 			params.push(+query.count);	
-		}
-		if (query.page && !isNaN(+query.count)) {
-			params.push(+query.page);	
+			if (query.page && !isNaN(+query.count)) {
+				params.push(+query.page);	
+			}
 		}
 		try{
-			console.log(params);
-			let result = await MessageServer.get.apply(this,params);
+			let result = await MessageServer.get.apply(MessageServer,params);
 			res.json(result);
 		}catch(e){
+			console.log(e);
 			res.json(e);
 		}
 	});

@@ -18,8 +18,6 @@ class MessageServer extends BaseServer {
 	async get(fromDate:Date,toDate:Date,limit?:number,page?:number);
 	async get():Promise<IListResponse<any>>{
 		var SQLArray = [];
-		console.log(arguments);
-		console.log(arguments.length);
 		SQLArray.push('SELECT * FROM message WHERE');
 
 		switch (arguments.length) {
@@ -72,8 +70,6 @@ class MessageServer extends BaseServer {
 				break;
 			}
 		}
-
-		console.log(SQLArray.join(' '))
 		let result = await this.query(SQLArray.join(' '));
 		return CreateListResponse<any>(result);
 	}

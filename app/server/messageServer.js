@@ -14,8 +14,6 @@ class MessageServer extends baseServer_1.BaseServer {
     get() {
         return __awaiter(this, arguments, void 0, function* () {
             var SQLArray = [];
-            console.log(arguments);
-            console.log(arguments.length);
             SQLArray.push('SELECT * FROM message WHERE');
             switch (arguments.length) {
                 case 0:
@@ -73,7 +71,6 @@ class MessageServer extends baseServer_1.BaseServer {
                     break;
                 }
             }
-            console.log(SQLArray.join(' '));
             let result = yield this.query(SQLArray.join(' '));
             return baseServer_1.CreateListResponse(result);
         });
