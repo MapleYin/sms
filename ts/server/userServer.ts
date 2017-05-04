@@ -63,11 +63,9 @@ class UserServer extends BaseServer{
 			throw CreateErrorResponse(StatusCode.missParams);
 		}
 		let userResult = await this.findByUserName(username);
-
 		if(userResult && userResult.length > 0) {
 			throw CreateErrorResponse(StatusCode.accountExisted);
 		}
-
 		try{
 			password = CryptoJS.SHA256(password).toString();
 			let secret = createRandomSecret(10);
@@ -91,7 +89,6 @@ class UserServer extends BaseServer{
 
 	private async findBy(params:string|[string],value:(string|number)|[string|number],limit?:number){
 		var matchParams:string;
-		console.log(params,value);
 		if(Array.isArray(params) && Array.isArray(value)) {
 			let paramsArray = params as Array<string>;
 			matchParams = paramsArray.join(' = ? AND ')+' = ?';

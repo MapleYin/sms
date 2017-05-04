@@ -7,7 +7,7 @@ export class DateFormat{
 	}
 }
 
-export function convertAnyToDate(param:string|number):Date {
+export function convertAnyToDate(param:number):Date {
 	let date = new Date(param);
 	if (isNaN(date.getTime())) {
 		return null;

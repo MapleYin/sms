@@ -1,64 +1,71 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
+const token_1 = require("../util/token");
 const dateExtension_1 = require("../util/dateExtension");
+const UserServer = require("../server/userServer");
 const MessageServer = require("../server/messageServer");
 exports.apiRouter = function (router) {
     router.get('/api/', function (req, res) {
         res.json({ message: 'Welcome to Push Api!' });
     });
     // authorize
-    router.post('/api/authorize', function (req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-        });
+    router.post('/api/authorize', async function (req, res) {
+        let loginInfo = req.body;
+        try {
+            let result = await UserServer.validateUser(loginInfo.username, loginInfo.password, req.ip);
+            res.json(result);
+        }
+        catch (e) {
+            console.log(e);
+            res.json(e);
+        }
     });
     // register
-    router.post('/api/register', function (req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-        });
+    router.post('/api/register', async function (req, res) {
+        let userame = req.body.username;
+        let password = req.body.password;
+        try {
+            let result = await UserServer.userRegist(userame, password);
+            res.json(result);
+        }
+        catch (e) {
+            console.log(e);
+            res.json(e);
+        }
     });
     // need authorized
-    // router.all('/api/*',ValidateExpress,function(req,res,next){
-    // 	next();
-    // });
-    router.get('/api/message', function (req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let query = req.query;
-            let params = [];
-            if (query.fromDate) {
-                let date = dateExtension_1.convertAnyToDate(query.fromDate);
-                if (date) {
-                    params.push(date);
-                }
+    router.all('/api/*', token_1.ValidateExpress, function (req, res, next) {
+        next();
+    });
+    router.get('/api/message', async function (req, res) {
+        let query = req.query;
+        let params = [];
+        if (query.fromDate) {
+            let date = dateExtension_1.convertAnyToDate(query.fromDate);
+            if (date) {
+                params.push(date);
             }
-            if (query.endDate) {
-                let date = dateExtension_1.convertAnyToDate(query.endDate);
-                if (date) {
-                    params.push(date);
-                }
+        }
+        if (query.endDate) {
+            let date = dateExtension_1.convertAnyToDate(query.endDate);
+            if (date) {
+                params.push(date);
             }
-            if (query.count && !isNaN(+query.count)) {
-                params.push(+query.count);
-                if (query.page && !isNaN(+query.count)) {
-                    params.push(+query.page);
-                }
+        }
+        if (query.count && !isNaN(+query.count)) {
+            params.push(+query.count);
+            if (query.page && !isNaN(+query.count)) {
+                params.push(+query.page);
             }
-            try {
-                let result = yield MessageServer.get.apply(MessageServer, params);
-                res.json(result);
-            }
-            catch (e) {
-                console.log(e);
-                res.json(e);
-            }
-        });
+        }
+        try {
+            let result = await MessageServer.get.apply(MessageServer, params);
+            res.json(result);
+        }
+        catch (e) {
+            console.log(e);
+            res.json(e);
+        }
     });
     router.all('*', function (req, res) {
         res.sendStatus(404);

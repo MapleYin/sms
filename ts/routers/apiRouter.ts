@@ -16,7 +16,7 @@ export let apiRouter = function(router:express.Router){
 	router.post('/api/authorize',async function(req,res){
 		let loginInfo = req.body;
 		try{
-			let result = UserServer.validateUser(loginInfo.username,loginInfo.password,req.ip);
+			let result = await UserServer.validateUser(loginInfo.username,loginInfo.password,req.ip);
 			res.json(result);
 		}catch(e){
 			console.log(e);
@@ -26,7 +26,15 @@ export let apiRouter = function(router:express.Router){
 
 	// register
 	router.post('/api/register',async function(req,res){
-		
+		let userame = req.body.username;
+		let password = req.body.password;
+		try{
+			let result = await UserServer.userRegist(userame,password);
+			res.json(result);
+		}catch(e){
+			console.log(e);
+			res.json(e);
+		}
 	});
 
     // need authorized
