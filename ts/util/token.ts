@@ -1,7 +1,7 @@
 import JsonWebTokenValidate = require("express-jwt");
 import JsonWebToken = require("jsonwebtoken");
 import * as express from "express";
-import {nodeCache} from './cache'
+import {nodeCache} from './cache';
 
 import CryptoJS = require('crypto-js');
 import UserServer = require("../server/userServer");

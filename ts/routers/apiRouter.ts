@@ -5,8 +5,6 @@ import {convertAnyToDate} from '../util/dateExtension'
 import UserServer = require("../server/userServer");
 import MessageServer = require("../server/messageServer");
 
-
-
 export let apiRouter = function(router:express.Router){
 	router.get('/api/',function(req,res){
 		res.json({message:'Welcome to Push Api!'});
@@ -17,6 +15,7 @@ export let apiRouter = function(router:express.Router){
 		let loginInfo = req.body;
 		try{
 			let result = await UserServer.validateUser(loginInfo.username,loginInfo.password,req.ip);
+
 			res.json(result);
 		}catch(e){
 			console.log(e);
