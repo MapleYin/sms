@@ -2,6 +2,8 @@ import * as express from "express";
 import {ValidateExpress} from '../util/token'
 import {convertAnyToDate} from '../util/dateExtension'
 
+import {responseDataEncode,requestDataDecode} from '../util/crypt'
+
 import UserServer = require("../server/userServer");
 import MessageServer = require("../server/messageServer");
 
@@ -12,10 +14,12 @@ export let apiRouter = function(router:express.Router){
 
 	// authorize
 	router.post('/api/authorize',async function(req,res){
-		let loginInfo = req.body;
 		try{
-			let result = await UserServer.validateUser(loginInfo.username,loginInfo.password,req.ip);
+			console.log(req.body);
+			console.log(requestDataDecode(req.body));
+			let loginInfo = JSON.parse(requestDataDecode(req.body));
 
+			let result = await UserServer.validateUser(loginInfo.username,loginInfo.password,req.ip);
 			res.json(result);
 		}catch(e){
 			console.log(e);

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const token_1 = require("../util/token");
 const dateExtension_1 = require("../util/dateExtension");
+const crypt_1 = require("../util/crypt");
 const UserServer = require("../server/userServer");
 const MessageServer = require("../server/messageServer");
 exports.apiRouter = function (router) {
@@ -10,8 +11,10 @@ exports.apiRouter = function (router) {
     });
     // authorize
     router.post('/api/authorize', async function (req, res) {
-        let loginInfo = req.body;
         try {
+            console.log(req.body);
+            console.log(crypt_1.requestDataDecode(req.body));
+            let loginInfo = JSON.parse(crypt_1.requestDataDecode(req.body));
             let result = await UserServer.validateUser(loginInfo.username, loginInfo.password, req.ip);
             res.json(result);
         }
