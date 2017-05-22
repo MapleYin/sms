@@ -15,10 +15,7 @@ export let apiRouter = function(router:express.Router){
 	// authorize
 	router.post('/api/authorize',async function(req,res){
 		try{
-			console.log(req.body);
-			console.log(requestDataDecode(req.body));
-			let loginInfo = JSON.parse(requestDataDecode(req.body));
-
+			let loginInfo = JSON.parse(requestDataDecode(req.body.toString()));
 			let result = await UserServer.validateUser(loginInfo.username,loginInfo.password,req.ip);
 			res.json(result);
 		}catch(e){

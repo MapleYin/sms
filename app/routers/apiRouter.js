@@ -12,9 +12,7 @@ exports.apiRouter = function (router) {
     // authorize
     router.post('/api/authorize', async function (req, res) {
         try {
-            console.log(req.body);
-            console.log(crypt_1.requestDataDecode(req.body));
-            let loginInfo = JSON.parse(crypt_1.requestDataDecode(req.body));
+            let loginInfo = JSON.parse(crypt_1.requestDataDecode(req.body.toString()));
             let result = await UserServer.validateUser(loginInfo.username, loginInfo.password, req.ip);
             res.json(result);
         }

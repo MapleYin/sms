@@ -6,6 +6,7 @@ const router_1 = require("./routers/router");
 let app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.raw());
 // subdomains.use('api');
 // app.use(subdomains.middleware);
 app.use(router_1.router);
