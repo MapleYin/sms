@@ -17,7 +17,7 @@ export let apiRouter = function(router:express.Router){
 		try{
 			let loginInfo = JSON.parse(requestDataDecode(req.body.toString()));
 			let result = await UserServer.validateUser(loginInfo.username,loginInfo.password,req.ip);
-			res.json(result);
+			res.send(responseDataEncode(JSON.stringify(result)));
 		}catch(e){
 			console.log(e);
 			res.json(e);
@@ -30,7 +30,7 @@ export let apiRouter = function(router:express.Router){
 		let password = req.body.password;
 		try{
 			let result = await UserServer.userRegist(userame,password);
-			res.json(result);
+			res.send(responseDataEncode(JSON.stringify(result)));
 		}catch(e){
 			console.log(e);
 			res.json(e);

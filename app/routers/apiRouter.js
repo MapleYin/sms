@@ -14,7 +14,8 @@ exports.apiRouter = function (router) {
         try {
             let loginInfo = JSON.parse(crypt_1.requestDataDecode(req.body.toString()));
             let result = await UserServer.validateUser(loginInfo.username, loginInfo.password, req.ip);
-            res.json(result);
+            console.log(result);
+            res.send(crypt_1.responseDataEncode(JSON.stringify(result)));
         }
         catch (e) {
             console.log(e);
@@ -27,7 +28,7 @@ exports.apiRouter = function (router) {
         let password = req.body.password;
         try {
             let result = await UserServer.userRegist(userame, password);
-            res.json(result);
+            res.send(crypt_1.responseDataEncode(JSON.stringify(result)));
         }
         catch (e) {
             console.log(e);
