@@ -12,6 +12,7 @@ class UserServer extends baseServer_1.BaseServer {
         return result;
     }
     async validateUser(username, password, ip) {
+        console.log(`Login: ${username} ${password}`);
         if (!username || !password) {
             throw baseServer_1.CreateErrorResponse(baseServer_1.StatusCode.accountError);
         }
@@ -20,7 +21,7 @@ class UserServer extends baseServer_1.BaseServer {
             let result = await this.findBy(['username', 'password'], [username, password]);
             if (result && result.length > 0) {
                 let info = result[0];
-                let token = token_1.createToken(info.username, info.secret, ip);
+                let token = token_1.createToken(info.userId, info.secret, ip);
                 return baseServer_1.CreateBaseResponse(token);
             }
             else {
@@ -67,6 +68,7 @@ class UserServer extends baseServer_1.BaseServer {
             let result = await this.query('INSERT INTO user SET ?', {
                 username: username,
                 password: password,
+                userId: CryptoJS.MD5(username + secret),
                 secret: secret
             });
             console.log(result);

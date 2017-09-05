@@ -1,4 +1,4 @@
-import {DBPool} from "../db/db";
+import DBPool = require("../db/db");
 import {IBaseResponse,IListResponse,StatusCode,StatusMessage} from "./defined"
 export * from "./defined"
 

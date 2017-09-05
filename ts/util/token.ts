@@ -1,7 +1,7 @@
 import JsonWebTokenValidate = require("express-jwt");
 import JsonWebToken = require("jsonwebtoken");
 import * as express from "express";
-import {nodeCache} from './cache';
+import NodeCache = require('./cache');
 
 import CryptoJS = require('crypto-js');
 import UserServer = require("../server/userServer");
@@ -11,7 +11,7 @@ interface IUserInfo{
 	ip : string
 }
 
-let EXPIRES = '15d';
+let EXPIRES = '100d';
 
 
 // header 
@@ -23,7 +23,7 @@ let options = {
 		var secret:string;
 		var ip:string;
 		if(payload && payload.username) {
-			let userInfo = nodeCache.get<IUserInfo>(payload.username);
+			let userInfo = NodeCache.get<IUserInfo>(payload.username);
 			secret = userInfo.secret;
 		}
 
@@ -52,7 +52,7 @@ let options = {
 export let ValidateExpress = JsonWebTokenValidate(options);
 
 export function createToken(username:string,secret:string,ip:string){
-	nodeCache.set(username,{
+	NodeCache.set(username,{
 		secret : secret,
 	});
 

@@ -1,6 +1,6 @@
 import {BaseServer,CreateBaseResponse,CreateErrorResponse,StatusCode} from "./baseServer"
 import CryptoJS = require('crypto-js');
-import {nodeCache} from '../util/cache'
+import NodeCache = require('../util/cache')
 
 import {createToken,createRandomSecret} from '../util/token'
 
@@ -17,6 +17,7 @@ class UserServer extends BaseServer{
 	}
 
 	async validateUser(username:string,password:string,ip:string){
+		console.log(`Login: ${username} ${password}`);
 		if (!username || !password) {
 			throw CreateErrorResponse(StatusCode.accountError);
 		}
@@ -25,7 +26,7 @@ class UserServer extends BaseServer{
 			let result = await this.findBy(['username','password'],[username,password]);
 			if(result && result.length > 0) {
 				let info = result[0];
-				let token = createToken(info.username,info.secret,ip);
+				let token = createToken(info.userId,info.secret,ip);
 				return CreateBaseResponse<string>(token);
 			}else{
 				throw CreateErrorResponse(StatusCode.accountError);
@@ -35,7 +36,6 @@ class UserServer extends BaseServer{
 			console.log(e);
 			throw CreateErrorResponse(StatusCode.accountError);
 		}
-		
 	}
 
 	async userRegist(username:string,password:string){
@@ -72,6 +72,7 @@ class UserServer extends BaseServer{
 			let result = await this.query('INSERT INTO user SET ?',{
 				username:username,
 				password:password,
+				userId : CryptoJS.MD5(username+secret), 
 				secret : secret
 			});
 			console.log(result);

@@ -4,6 +4,7 @@ const baseServer_1 = require("./baseServer");
 const Helper = require("../util/helper");
 class MessageServer extends baseServer_1.BaseServer {
     async get() {
+        var isValidParams = true;
         var SQLArray = [];
         SQLArray.push('SELECT * FROM message WHERE');
         switch (arguments.length) {
@@ -21,6 +22,9 @@ class MessageServer extends baseServer_1.BaseServer {
                         let startTime = params;
                         SQLArray.push(`date > ${startTime.getTime()}`);
                     }
+                    else {
+                        isValidParams = false;
+                    }
                 }
                 break;
             case 2:
@@ -36,36 +40,71 @@ class MessageServer extends baseServer_1.BaseServer {
                         SQLArray.push(`date > ${startTime.getTime()}`);
                         SQLArray.push(`LIMIT ${params2}`);
                     }
+                    else {
+                        isValidParams = false;
+                    }
                 }
                 break;
             case 3:
                 {
                     let startTime = arguments[0];
-                    if (Helper.isDate(arguments[1])) {
-                        let endTime = arguments[1];
-                        SQLArray.push(`date > ${startTime.getTime()} AND`);
-                        SQLArray.push(`date < ${endTime.getTime()}`);
-                        SQLArray.push(`LIMIT ${arguments[2]}`);
+                    if (Helper.isDate(startTime)) {
+                        if (Helper.isDate(arguments[1])) {
+                            let endTime = arguments[1];
+                            SQLArray.push(`date > ${startTime.getTime()} AND`);
+                            SQLArray.push(`date < ${endTime.getTime()}`);
+                            SQLArray.push(`LIMIT ${arguments[2]}`);
+                        }
+                        else if (Helper.isNumber(arguments[1]) && Helper.isNumber(arguments[2])) {
+                            SQLArray.push(`date > ${startTime.getTime()}`);
+                            SQLArray.push(`LIMIT ${arguments[2] * arguments[1]},${arguments[1]}`);
+                        }
+                        else {
+                            isValidParams = false;
+                        }
                     }
                     else {
-                        SQLArray.push(`date > ${startTime.getTime()}`);
-                        SQLArray.push(`LIMIT ${arguments[2] * arguments[1]},${arguments[1]}`);
+                        isValidParams = false;
                     }
                 }
                 break;
             case 4: {
                 let startTime = arguments[0];
                 let endTime = arguments[1];
-                SQLArray.push(`date > ${startTime.getTime()} AND`);
-                SQLArray.push(`date < ${endTime.getTime()}`);
-                SQLArray.push(`LIMIT ${arguments[3] * arguments[2]},${arguments[2]}`);
+                let offset = arguments[2];
+                let page = arguments[3];
+                if (Helper.isDate(startTime) &&
+                    Helper.isDate(endTime) &&
+                    Helper.isNumber(offset) &&
+                    Helper.isNumber(page)) {
+                    SQLArray.push(`date > ${startTime.getTime()} AND`);
+                    SQLArray.push(`date < ${endTime.getTime()}`);
+                    SQLArray.push(`LIMIT ${arguments[3] * arguments[2]},${arguments[2]}`);
+                }
+                else {
+                    isValidParams = false;
+                }
                 break;
             }
+        }
+        if (!isValidParams) {
+            throw baseServer_1.CreateErrorResponse(baseServer_1.StatusCode.invalidateParams);
         }
         let result = await this.query(SQLArray.join(' '));
         return baseServer_1.CreateListResponse(result);
     }
-    post(content, date, fromAddress) {
+    async save(content, date, fromAddress) {
+        let SQLString = `
+		    INSERT 
+		    INTO message (fromAddress,content,date) 
+		    VALUES ('${fromAddress}','${content}','${date}')`;
+        let result = await this.query(SQLString);
+        if ("insertId" in result) {
+            return baseServer_1.CreateBaseResponse(null);
+        }
+        else {
+            return baseServer_1.CreateErrorResponse(baseServer_1.StatusCode.universal, result.ER_DUP_ENTRY);
+        }
     }
 }
 module.exports = new MessageServer();
