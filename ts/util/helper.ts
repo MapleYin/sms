@@ -31,3 +31,26 @@ export let isMapObject = ()=>{
 export let isClass = (origin,target)=>{
 	return origin instanceof target
 }
+
+
+
+// create
+// 33 ~ 126
+/**
+ * Return A Random String of Specified Length
+ * @param  {number} length length of string
+ * @return {string}        Random String
+ */
+export function RandomString(length:number):string {
+	let charArray = [];
+	while(length > 0){
+		charArray.push(String.fromCharCode(Math.random()*93+33));
+		length--;
+	}
+	return charArray.join('');
+}
+
+
+
+
+

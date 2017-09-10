@@ -17,16 +17,16 @@ let EXPIRES = '100d';
 // header 
 // authorization Bearer token
 
-
 let options = {
-	secret : (req, payload, done)=>{
+	secret : (req, payload, done) => {
 		var secret:string;
 		var ip:string;
 		if(payload && payload.username) {
 			let userInfo = NodeCache.get<IUserInfo>(payload.username);
-			secret = userInfo.secret;
+			if (userInfo && userInfo.secret) {
+				secret = userInfo.secret;
+			}
 		}
-
 		if(secret) {
 			done(null,secret);
 		}else{
@@ -44,14 +44,14 @@ let options = {
 			});
 		}	
 	},
-	isRevoked:(req, payload, done)=>{
+	isRevoked : (req, payload, done) => {
 		done(null,false);
 	}
 };
 
 export let ValidateExpress = JsonWebTokenValidate(options);
 
-export function createToken(username:string,secret:string,ip:string){
+export function CreateToken(username:string,secret:string){
 	NodeCache.set(username,{
 		secret : secret,
 	});
@@ -60,15 +60,3 @@ export function createToken(username:string,secret:string,ip:string){
 		expiresIn : EXPIRES
 	});
 };
-// 33 ~ 126
-export function createRandomSecret(length:number){
-	let charArray = [];
-	while(length > 0){
-		charArray.push(String.fromCharCode(Math.random()*93+33));
-		length--;
-	}
-	return charArray.join('');
-};
-
-
-

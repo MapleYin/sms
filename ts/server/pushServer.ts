@@ -3,7 +3,7 @@ import fs = require("fs");
 import path = require("path");
 
 
-export interface PushPayload{
+interface PushPayload{
 	title?: string;
 	subtitle?: string;
 	body: string;
@@ -20,7 +20,9 @@ class PushServer{
 
 	private currentPushPayload:Apn.Notification;
 
-	constructor(){
+	private retryCount = 0;
+
+	constructor() {
 		let cert = fs.readFileSync(path.join(__dirname,'../cert/SMSPush.pem'));
 		let key = fs.readFileSync(path.join(__dirname,'../cert/key.pem'));
 		this.apnProvider = new Apn.Provider({
@@ -30,14 +32,29 @@ class PushServer{
 		});
 	}
 
-	sendPush(payload:PushPayload){
+	sendPush(payload:PushPayload) {
 		this.currentPushPayload = new Apn.Notification();
 		this.currentPushPayload.alert = payload;
 		return this;
 	}
-
 	toUsers(userToken:string[]){
-		this.apnProvider.send(this.currentPushPayload,userToken)
+		let self = this;
+		if (!this.currentPushPayload) {
+			return ;
+		}
+		this.apnProvider.send(this.currentPushPayload,userToken).then((value:Apn.Responses)=>{
+			let failureList = value.failed.map((responseFailure)=>{
+				return responseFailure.device
+			});
+			if (failureList.length > 0 && self.retryCount < 5) {
+				self.retryCount++;
+				self.toUsers(failureList);
+			} else {
+				self.retryCount = 0;
+				this.currentPushPayload = null
+			}
+		});
 	}
 }
-export let PushManager = new PushServer()
+
+export = new PushServer();

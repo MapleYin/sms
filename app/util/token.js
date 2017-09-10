@@ -4,7 +4,7 @@ const JsonWebTokenValidate = require("express-jwt");
 const JsonWebToken = require("jsonwebtoken");
 const NodeCache = require("./cache");
 const UserServer = require("../server/userServer");
-let EXPIRES = '15d';
+let EXPIRES = '100d';
 // header 
 // authorization Bearer token
 let options = {
@@ -13,7 +13,9 @@ let options = {
         var ip;
         if (payload && payload.username) {
             let userInfo = NodeCache.get(payload.username);
-            secret = userInfo.secret;
+            if (userInfo && userInfo.secret) {
+                secret = userInfo.secret;
+            }
         }
         if (secret) {
             done(null, secret);
@@ -39,7 +41,7 @@ let options = {
     }
 };
 exports.ValidateExpress = JsonWebTokenValidate(options);
-function createToken(username, secret, ip) {
+function createToken(username, secret) {
     NodeCache.set(username, {
         secret: secret,
     });

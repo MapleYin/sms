@@ -22,4 +22,4 @@ class PushServer {
         this.apnProvider.send(this.currentPushPayload, userToken);
     }
 }
-exports.PushManager = new PushServer();
+exports.pushServer = new PushServer();

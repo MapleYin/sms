@@ -2,15 +2,21 @@
   "name": "SMSServer",
   "version": "0.0.0",
   "private": true,
+  "scripts": {
+    "test": "mocha './app/test/**/*.js'"
+  },
   "dependencies": {
-  	"express": "~4.13.1",
-    "express-subdomains" : "*",
-    "express-jwt" : "*",
-    "jsonwebtoken" : "*",
-  	"mysql" : "*",
-    "node-cache" : "*",
-    "crypto-js" : "*",
+    "express": "~4.13.1",
+    "express-subdomains": "*",
+    "express-jwt": "*",
+    "jsonwebtoken": "*",
+    "mysql": "*",
+    "node-cache": "*",
+    "crypto-js": "*",
     "body-parser": "~1.13.2",
-    "apn":"*"
+    "apn": "*"
+  },
+  "devDependencies": {
+    "mocha": "^3.5.0"
   }
 }

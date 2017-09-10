@@ -1,13 +1,9 @@
 import * as express from "express";
 import {ValidateExpress} from '../util/token'
-import {convertAnyToDate} from '../util/dateExtension'
 
-import {responseDataEncode,requestDataDecode} from '../util/crypt'
-
-import UserServer = require("../server/userServer");
-import MessageServer = require("../server/messageServer");
 
 export let apiRouter = function(router:express.Router){
+
 	router.get('/api/',function(req,res){
 		res.json({message:'Welcome to Push Api!'});
 	});
@@ -16,9 +12,9 @@ export let apiRouter = function(router:express.Router){
 	router.post('/api/authorize',async (req,res)=>{
 		try{
 			let loginInfo = JSON.parse(requestDataDecode(req.body.toString()));
-			let result = await UserServer.validateUser(loginInfo.username,loginInfo.password,req.ip);
+			let result = await UserServer.validateUser(loginInfo.username,loginInfo.password);
 			console.log(result);
-			res.send(responseDataEncode(JSON.stringify(result)));
+			res.send(result);
 		}catch(e){
 			console.log(e);
 			res.json(e);
@@ -28,9 +24,12 @@ export let apiRouter = function(router:express.Router){
 	// register
 	router.post('/api/register',async (req,res)=>{
 		try{
-			let registerInfo = JSON.parse(requestDataDecode(req.body.toString()));
-			let result = await UserServer.userRegist(registerInfo.username,registerInfo.password);
-			res.send(responseDataEncode(JSON.stringify(result)));
+			let registInfo = JSON.parse(requestDataDecode(req.body.toString()));
+			let userame = registInfo.username;
+			let password = registInfo.password;
+
+			let result = await UserServer.userRegist(userame,password);
+			res.send(result);
 		}catch(e){
 			console.log(e);
 			res.json(e);
@@ -39,7 +38,34 @@ export let apiRouter = function(router:express.Router){
 
     // need authorized
 	router.all('/api/*',ValidateExpress,(req,res,next)=>{
-		next();
+		try {
+			req.body = JSON.parse(requestDataDecode(req.body.toString()));
+			next();
+		} catch(e) {
+			next(e);
+		}
+	});
+
+	router.get('/api/init',function (req,res) {
+		try {
+			let initInfo = req.body;
+			let pushToken = initInfo.token
+			
+			res.send();
+		} catch(e) {
+			res.send();
+		}
+	});
+
+	router.post('/api/message',async function(req,res){
+		try{
+			let msgInfo = req.body;
+			let result = await MessageServer.save(msgInfo.content,msgInfo.timeInterval,msgInfo.fromAddress);
+			res.send(result);
+		}catch(e){
+			console.log(e);
+			res.json(e);
+		}
 	});
 
 	router.get('/api/message',async (req,res)=>{
@@ -65,7 +91,7 @@ export let apiRouter = function(router:express.Router){
 		}
 		try{
 			let result = await MessageServer.get.apply(MessageServer,params);
-			res.send(responseDataEncode(JSON.stringify(result)));
+			res.send(result);
 		}catch(e){
 			console.log(e);
 			res.json(e);
