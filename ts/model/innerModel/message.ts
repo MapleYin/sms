@@ -1,5 +1,23 @@
-export interface Message {
+interface IMessage {
 	content : string;
 	timeInterval : number;
-	fromAddress : string;
+	from : string;
+	to : string;
+}
+
+
+export class Message implements IMessage {
+	content : string;
+	timeInterval : number;
+	from : string;
+	to : string;
+
+
+	constructor(messageInfo:any) {
+		this.content = messageInfo.content || "";
+		this.timeInterval = messageInfo.timeInterval || "";
+		this.from = messageInfo.from || "";
+		this.to = messageInfo.to || "";
+		return this;
+	}
 }

@@ -2,6 +2,7 @@
 const baseServer_1 = require("./baseServer");
 const CryptoJS = require("crypto-js");
 const token_1 = require("../util/token");
+const Helper = require("../util/helper");
 class UserServer extends baseServer_1.BaseServer {
     async findById(userId) {
         return await this.findBy('userId', userId);
@@ -15,7 +16,7 @@ class UserServer extends baseServer_1.BaseServer {
         let result = await this.findBy(['username', 'password'], [username, password]);
         if (result && result.length > 0) {
             let info = result[0];
-            let token = token_1.createToken(info.userId, info.secret);
+            let token = token_1.CreateToken(info.userId, info.secret);
             return token;
         }
         else {
@@ -23,43 +24,20 @@ class UserServer extends baseServer_1.BaseServer {
         }
     }
     async userRegist(username, password) {
-        // success : 
-        // {
-        // 	"fieldCount": 0,
-        // 	"affectedRows": 1,
-        // 	"insertId": 8,
-        // 	"serverStatus": 2,
-        // 	"warningCount": 0,
-        // 	"message": "",
-        // 	"protocol41": true,
-        // 	"changedRows": 0
-        // }
-        // error :
-        // {
-        // 	"code": "ER_DUP_ENTRY",
-        // 	"errno": 1062,
-        // 	"sqlState": "23000",
-        // 	"index": 0
-        // }
-        let userResult = await this.findByUserName(username);
-        if (userResult && userResult.length > 0) {
-            throw false;
-        }
         password = CryptoJS.SHA256(password).toString();
-        let secret = token_1.createRandomSecret(32);
+        let secret = Helper.RandomString(32);
         let result = await this.query('INSERT INTO user SET ?', {
             "username": username,
             "password": password,
             "userId": CryptoJS.MD5(username + secret),
             "secret": secret
         });
-        if (result && result.insertId) {
-            return true;
-        }
-        else {
-            throw false;
-        }
+        return result;
     }
+    async updatePushToken(token, userId) {
+        return await this.query(`UPDATE user SET pushtoken = ? WHERE userId = ?`, [token, userId]);
+    }
+    // Private ============================================================
     async findBy(params, value, limit) {
         var matchParams;
         if (Array.isArray(params) && Array.isArray(value)) {
@@ -75,12 +53,6 @@ class UserServer extends baseServer_1.BaseServer {
         }
         let result = await this.query(`SELECT *,UNIX_TIMESTAMP(date) as date FROM user WHERE ${matchParams}`, value);
         return result;
-    }
-    async updateUserInfo(username, modify) {
-        return this.query('UPDATE ');
-    }
-    async updatePushToken(token, userId) {
-        return this.query(`UPDATE user SET pushtoken = ${token} WHERE userId = ${userId}`);
     }
 }
 module.exports = new UserServer();

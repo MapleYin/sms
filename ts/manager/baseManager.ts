@@ -1,7 +1,7 @@
 import {BaseResponse,ListResponse,StatusCode,StatusMessage} from "./defined"
 export * from "./defined"
 export class BaseManager {
-	protected baseResponse<T>(data:T):BaseResponse<T> {
+	protected baseResponse<T>(data?:T):BaseResponse<T> {
 		return {
 			code : StatusCode.success,
 			message : StatusMessage[StatusCode.success],
@@ -9,7 +9,7 @@ export class BaseManager {
 		}
 	}
 
-	protected listResponse<T>(data:T[]):ListResponse<T>{
+	protected listResponse<T>(data?:T[]):ListResponse<T>{
 		return {
 			code : StatusCode.success,
 			message : StatusMessage[StatusCode.success],
@@ -17,7 +17,7 @@ export class BaseManager {
 		}
 	}
 
-	protected rrorResponse(errorCode:StatusCode,message?:string):BaseResponse<string>{
+	protected errorResponse(errorCode:StatusCode,message?:string):BaseResponse<string>{
 		return {
 			code : errorCode,
 			message : message || StatusMessage[errorCode],

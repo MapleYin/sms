@@ -5,6 +5,7 @@ const fs = require("fs");
 const path = require("path");
 class PushServer {
     constructor() {
+        this.retryCount = 0;
         let cert = fs.readFileSync(path.join(__dirname, '../cert/SMSPush.pem'));
         let key = fs.readFileSync(path.join(__dirname, '../cert/key.pem'));
         this.apnProvider = new Apn.Provider({
@@ -19,7 +20,23 @@ class PushServer {
         return this;
     }
     toUsers(userToken) {
-        this.apnProvider.send(this.currentPushPayload, userToken);
+        let self = this;
+        if (!this.currentPushPayload) {
+            return;
+        }
+        this.apnProvider.send(this.currentPushPayload, userToken).then((value) => {
+            let failureList = value.failed.map((responseFailure) => {
+                return responseFailure.device;
+            });
+            if (failureList.length > 0 && self.retryCount < 5) {
+                self.retryCount++;
+                self.toUsers(failureList);
+            }
+            else {
+                self.retryCount = 0;
+                this.currentPushPayload = null;
+            }
+        });
     }
 }
 exports.pushServer = new PushServer();

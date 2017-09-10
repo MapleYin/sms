@@ -7,7 +7,8 @@ class MessageServer extends baseServer_1.BaseServer {
         SQLArray.push(`SELECT 
 			content,
 			timeInterval,
-			fromAddress
+			\`from\`,
+			\`to\`
 			FROM message WHERE`);
         let conditions = [];
         let limits = [];
@@ -34,14 +35,16 @@ class MessageServer extends baseServer_1.BaseServer {
     async save(message) {
         let SQLString = `
 		    INSERT 
-		    INTO message (fromAddress,
+		    INTO message (\`from\`,
 		    			content,
-		    			timeInterval
+		    			timeInterval,
+		    			\`to\`
 		    			) 
 		    VALUES (
-			    '${message.fromAddress}',
+			    '${message.from}',
 			    '${message.content}',
-			    ${message.timeInterval}
+			    ${message.timeInterval},
+			    '${message.to}'
 		    )`;
         let result = await this.query(SQLString);
         return result;

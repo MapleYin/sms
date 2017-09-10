@@ -41,7 +41,7 @@ let options = {
     }
 };
 exports.ValidateExpress = JsonWebTokenValidate(options);
-function createToken(username, secret) {
+function CreateToken(username, secret) {
     NodeCache.set(username, {
         secret: secret,
     });
@@ -49,16 +49,5 @@ function createToken(username, secret) {
         expiresIn: EXPIRES
     });
 }
-exports.createToken = createToken;
-;
-// 33 ~ 126
-function createRandomSecret(length) {
-    let charArray = [];
-    while (length > 0) {
-        charArray.push(String.fromCharCode(Math.random() * 93 + 33));
-        length--;
-    }
-    return charArray.join('');
-}
-exports.createRandomSecret = createRandomSecret;
+exports.CreateToken = CreateToken;
 ;

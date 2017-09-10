@@ -29,30 +29,6 @@ class UserServer extends BaseServer{
 	}
 
 	async userRegist(username:string,password:string) {
-		
-		// success : 
-		// {
-		// 	"fieldCount": 0,
-		// 	"affectedRows": 1,
-		// 	"insertId": 8,
-		// 	"serverStatus": 2,
-		// 	"warningCount": 0,
-		// 	"message": "",
-		// 	"protocol41": true,
-		// 	"changedRows": 0
-		// }
-		// error :
-		// {
-		// 	"code": "ER_DUP_ENTRY",
-		// 	"errno": 1062,
-		// 	"sqlState": "23000",
-		// 	"index": 0
-		// }
-
-		let userResult = await this.findByUserName(username);
-		if (userResult && userResult.length > 0) {
-			throw false
-		}
 		password = CryptoJS.SHA256(password).toString();
 		let secret = Helper.RandomString(32);
 		let result = await this.query('INSERT INTO user SET ?',{
@@ -61,12 +37,14 @@ class UserServer extends BaseServer{
 			"userId" : CryptoJS.MD5(username+secret), 
 			"secret" : secret
 		});
-		if(result && result.insertId) {
-			return true;
-		}else{
-			throw false;
-		}
+		return result;
 	}
+
+	async updatePushToken(token:string,userId:string) {
+		return await this.query(`UPDATE user SET pushtoken = ? WHERE userId = ?`,[token,userId])
+	}
+
+	// Private ============================================================
 
 	private async findBy(params:string|[string],value:(string|number)|[string|number],limit?:number):Promise<Array<User>> {
 		var matchParams:string;
@@ -84,14 +62,5 @@ class UserServer extends BaseServer{
 		let result = await this.query(`SELECT *,UNIX_TIMESTAMP(date) as date FROM user WHERE ${matchParams}`,value);
 		return result;
 	}
-
-	async updateUserInfo(username:string,modify:{[key:string]:any}) {
-		return this.query('UPDATE ')
-	}
-
-	async updatePushToken(token:string,userId:string) {
-		return this.query(`UPDATE user SET pushtoken = ${token} WHERE userId = ${userId}`)
-	}
-
 }
 export = new UserServer();

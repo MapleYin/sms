@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
-// import {apiRouter} from './apiRouter'
+const apiRouter = require("./apiRouter");
 exports.router = express.Router();
-// apiRouter(router); 
+apiRouter(exports.router);

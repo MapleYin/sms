@@ -14,7 +14,8 @@ let time20170101120012 = (new Date("2017-01-01 12:00:12")).getTime()
 
 let message1:Message = {
 	content : "测试1",
-	fromAddress : "18612531029",
+	from : "18612531029",
+	to : "17319215053",
 	timeInterval : timeIntervalCurrent
 };
 

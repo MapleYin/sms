@@ -1,6 +1,6 @@
 import * as express from "express";
-// import {apiRouter} from './apiRouter'
+import apiRouter = require('./apiRouter');
 export let router = express.Router();
 
 
-// apiRouter(router);
+apiRouter(router);

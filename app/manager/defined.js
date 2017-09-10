@@ -3,12 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var StatusCode;
 (function (StatusCode) {
     StatusCode[StatusCode["success"] = 0] = "success";
-    // error
+    // account error
     StatusCode[StatusCode["unauthorized"] = 100] = "unauthorized";
     StatusCode[StatusCode["accountError"] = 101] = "accountError";
     StatusCode[StatusCode["accountExisted"] = 102] = "accountExisted";
+    // params error
     StatusCode[StatusCode["missParams"] = 200] = "missParams";
     StatusCode[StatusCode["invalidateParams"] = 201] = "invalidateParams";
+    // unknown
     StatusCode[StatusCode["universal"] = 500] = "universal";
 })(StatusCode = exports.StatusCode || (exports.StatusCode = {}));
 let StatusMessage = {};
