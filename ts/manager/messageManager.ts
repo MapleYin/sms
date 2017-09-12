@@ -12,6 +12,7 @@ class MessageManager extends BaseManager {
 			let msgInfo = JSON.parse(req.body);
 			let message = new Message(msgInfo);
 			let result = await MessageServer.save(message);
+			
 			res.send(result);
 		}catch(e){
 			console.log(e);
@@ -22,7 +23,7 @@ class MessageManager extends BaseManager {
 	fetch:express.RequestHandler = async (req,res,next) => {
 		let query = req.query;
 		try{
-			let result = await MessageManager
+			let result = await MessageServer
 			res.send(result);
 		}catch(e){
 			console.log(e);

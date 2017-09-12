@@ -4,6 +4,11 @@ import assert = require('assert');
 import {app} from "../index"
 
 
+import Crypt = require('../util/crypt')
+
+
+var token;
+
 describe('Api Router', function() {
 	it('GET /api/ respond with json', function() {
 		return supertest(app)
@@ -28,6 +33,29 @@ describe('Api Router', function() {
 		});
 	});
 
+	it('POST /api/user/authorize Should authorize Right', (done)=>{
+		supertest(app)
+		.post('/api/user/authorize')
+		.set('Content-Type','application/octet-stream')
+		.send('9EDygQ/b05Z+w0CCOP0BXl+PPhdwUIAHWC+YWOdJv0km2zy9pbv87dplNlKZDwr9O1f6rElyw+7t9EWVS2Gjfw==')
+		.then((res)=>{
+			token = Crypt.RequestDataDecode(res.text);
+			done();
+		}).catch((e)=>{
+			done(e);
+		})
+	});
+
+	it('GET /api/testToken', (done) => {
+		supertest(app)
+		.get('/api/testToken')
+		.set('authorization','Bearer '+token)
+		.then((res) => {
+			done();	
+		}).catch((e) => {
+			done(e);
+		})
+	});
 	
 });
 

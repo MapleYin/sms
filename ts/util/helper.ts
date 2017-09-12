@@ -24,8 +24,8 @@ export let isDate = (maybeDate)=>{
 	return isClass(maybeDate,Date)
 }
 
-export let isMapObject = ()=>{
-	
+export let isMapObject = (mayMapObject)=>{
+
 }
 
 export let isClass = (origin,target)=>{

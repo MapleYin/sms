@@ -36,6 +36,9 @@ let pushToken = "D36908BC2A4D9DC67A7CB200F42A6693D90F9FC37D7F30EF8D7D68E3660CC0D
 
 var userId = "";
 
+
+var token = "";
+
 describe("UserServer",()=>{
 	it("#userRegist() Should Be Right",(done)=>{
 		UserServer.userRegist(user1.username,user1.password).then((result)=>{
@@ -49,19 +52,18 @@ describe("UserServer",()=>{
 		UserServer.userRegist(user1.username,user1.password).then((result)=>{
 			done(result);
 		}).catch((error)=>{
-			console.log(JSON.stringify(error));
 			done();
 		});
 	});
 
 	it("#validateUser() Should Be Right",(done)=>{
-		UserServer.validateUser(user1.username,user1.password).then((result)=>{
+		UserServer.validateUser(user1.username,user1.password).then((result) => {
 			if (result.length == 0) {
 				done("valid failed");
 			} else {
 				done();
 			}
-		}).catch((error)=>{
+		}).catch((error) => {
 			done(error.message);
 		})
 	});

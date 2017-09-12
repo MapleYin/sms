@@ -1,5 +1,7 @@
 "use strict";
 const Crypt = require("../util/crypt");
+const token_1 = require("../util/token");
+const Helper = require("../util/helper");
 const MessageManager = require("../manager/messageManager");
 const UserManager = require("../manager/userManager");
 let crypt = (req, res, next) => {
@@ -7,7 +9,10 @@ let crypt = (req, res, next) => {
         req.body = Crypt.RequestDataDecode(req.body.toString());
         var oldSend = res.send;
         res.send = function (data) {
-            data = Crypt.ResponseDataEncode(JSON.stringify(data));
+            if (!Helper.isString(data)) {
+                data = JSON.stringify(data);
+            }
+            data = Crypt.ResponseDataEncode(data);
             return oldSend.call(res, data);
         };
         next();
@@ -22,13 +27,16 @@ module.exports = function (router) {
     });
     // encode decode
     router.all('/api/*', crypt);
+    // test
+    router.get('/api/testToken', token_1.ValidateExpress, (req, res) => {
+        res.send(req.user.username);
+    });
     // user 
-    // authorize
     router.post('/api/user/register', UserManager.userRegist);
     router.post('/api/user/authorize', UserManager.validateUser);
-    // message router
-    router.post('/api/message/receive', MessageManager.save);
-    router.get('/api/message/fetch', MessageManager.fetch);
+    // message
+    router.post('/api/message/receive', token_1.ValidateExpress, MessageManager.save);
+    router.get('/api/message/fetch', token_1.ValidateExpress, MessageManager.fetch);
     router.all('*', (req, res) => {
         res.sendStatus(404);
     });

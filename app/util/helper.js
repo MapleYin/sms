@@ -19,7 +19,7 @@ exports.isArray = (maybeArray) => {
 exports.isDate = (maybeDate) => {
     return exports.isClass(maybeDate, Date);
 };
-exports.isMapObject = () => {
+exports.isMapObject = (mayMapObject) => {
 };
 exports.isClass = (origin, target) => {
     return origin instanceof target;

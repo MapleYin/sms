@@ -11,8 +11,8 @@ app.use(bodyParser.raw());
 app.disable('etag');
 
 
-// subdomains.use('api');
-// app.use(subdomains.middleware);
+subdomains.use('api');
+app.use(subdomains.middleware);
 
 app.use(router);
 
@@ -26,4 +26,4 @@ app.use(function (err, req, res, next) {
 	}
 });
 
-// app.listen(3003);
+app.listen(3003);

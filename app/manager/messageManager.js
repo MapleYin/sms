@@ -20,7 +20,7 @@ class MessageManager extends baseManager_1.BaseManager {
         this.fetch = async (req, res, next) => {
             let query = req.query;
             try {
-                let result = await MessageManager;
+                let result = await MessageServer;
                 res.send(result);
             }
             catch (e) {
