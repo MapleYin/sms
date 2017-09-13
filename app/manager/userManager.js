@@ -19,7 +19,7 @@ class UserManager extends baseManager_1.BaseManager {
             try {
                 let userInfo = JSON.parse(req.body);
                 let result = await UserServer.validateUser(userInfo.username, userInfo.password);
-                res.send(result);
+                res.send(this.baseResponse(result));
             }
             catch (error) {
                 console.log(error);
@@ -31,7 +31,7 @@ class UserManager extends baseManager_1.BaseManager {
                 let userInfo = JSON.parse(req.body);
                 let userId = req.user.username;
                 let result = await UserServer.updatePushToken(userInfo.pushToken, userId);
-                res.send(result);
+                res.send(this.baseResponse());
             }
             catch (error) {
                 console.log(error);
