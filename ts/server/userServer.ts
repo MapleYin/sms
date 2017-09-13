@@ -7,7 +7,7 @@ import * as Helper from '../util/helper'
 
 class UserServer extends BaseServer{
 
-	async findById(userId:number) {
+	async findById(userId:string) {
 		return await this.findBy('userId',userId);
 	}
 
@@ -41,7 +41,8 @@ class UserServer extends BaseServer{
 	}
 
 	async updatePushToken(token:string,userId:string) {
-		return await this.query(`UPDATE user SET pushtoken = ? WHERE userId = ?`,[token,userId])
+		let result = await this.query(`UPDATE user SET pushtoken = ? WHERE userId = ?`,[token,userId]);
+		return true;
 	}
 
 	// Private ============================================================

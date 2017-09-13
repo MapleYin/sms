@@ -34,6 +34,7 @@ module.exports = function (router) {
     // user 
     router.post('/api/user/register', UserManager.userRegist);
     router.post('/api/user/authorize', UserManager.validateUser);
+    router.post('/api/user/init', token_1.ValidateExpress, UserManager.init);
     // message
     router.post('/api/message/receive', token_1.ValidateExpress, MessageManager.save);
     router.get('/api/message/fetch', token_1.ValidateExpress, MessageManager.fetch);

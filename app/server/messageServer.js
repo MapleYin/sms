@@ -40,13 +40,8 @@ class MessageServer extends baseServer_1.BaseServer {
 		    			timeInterval,
 		    			\`to\`
 		    			) 
-		    VALUES (
-			    '${message.from}',
-			    '${message.content}',
-			    ${message.timeInterval},
-			    '${message.to}'
-		    )`;
-        let result = await this.query(SQLString);
+		    VALUES (?,?,?,?)`;
+        let result = await this.query(SQLString, [message.from, message.content, message.timeInterval, message.to]);
         return result;
     }
 }

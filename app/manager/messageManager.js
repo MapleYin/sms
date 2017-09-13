@@ -1,5 +1,6 @@
 "use strict";
 const baseManager_1 = require("./baseManager");
+const PushManager = require("./pushManager");
 const MessageServer = require("../server/messageServer");
 const message_1 = require("../model/innerModel/message");
 class MessageManager extends baseManager_1.BaseManager {
@@ -10,7 +11,9 @@ class MessageManager extends baseManager_1.BaseManager {
                 let msgInfo = JSON.parse(req.body);
                 let message = new message_1.Message(msgInfo);
                 let result = await MessageServer.save(message);
-                res.send(result);
+                // push message
+                let pushResult = await PushManager.sendMessagePush(message.from, message.content, req.user.username);
+                res.send(this.baseResponse(pushResult));
             }
             catch (e) {
                 console.log(e);

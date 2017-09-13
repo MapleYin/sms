@@ -10,8 +10,9 @@ class UserManager extends baseManager_1.BaseManager {
                 let result = await UserServer.userRegist(userInfo.username, userInfo.password);
                 res.send(this.baseResponse());
             }
-            catch (e) {
-                res.send(e);
+            catch (error) {
+                console.log(error);
+                res.send(error);
             }
         };
         this.validateUser = async (req, res, next) => {
@@ -20,8 +21,21 @@ class UserManager extends baseManager_1.BaseManager {
                 let result = await UserServer.validateUser(userInfo.username, userInfo.password);
                 res.send(result);
             }
-            catch (e) {
-                res.send(e);
+            catch (error) {
+                console.log(error);
+                res.send(error);
+            }
+        };
+        this.init = async (req, res, next) => {
+            try {
+                let userInfo = JSON.parse(req.body);
+                let userId = req.user.username;
+                let result = await UserServer.updatePushToken(userInfo.pushToken, userId);
+                res.send(result);
+            }
+            catch (error) {
+                console.log(error);
+                res.send(error);
             }
         };
     }

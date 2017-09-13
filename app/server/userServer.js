@@ -35,7 +35,8 @@ class UserServer extends baseServer_1.BaseServer {
         return result;
     }
     async updatePushToken(token, userId) {
-        return await this.query(`UPDATE user SET pushtoken = ? WHERE userId = ?`, [token, userId]);
+        let result = await this.query(`UPDATE user SET pushtoken = ? WHERE userId = ?`, [token, userId]);
+        return true;
     }
     // Private ============================================================
     async findBy(params, value, limit) {

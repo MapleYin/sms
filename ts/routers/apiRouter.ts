@@ -44,6 +44,7 @@ export = function(router:Express.Router) {
 	// user 
 	router.post('/api/user/register',UserManager.userRegist);
 	router.post('/api/user/authorize',UserManager.validateUser);
+	router.post('/api/user/init',ValidateExpress,UserManager.init);
 
 
 	// message

@@ -1,6 +1,6 @@
 import * as express from "express";
 import {BaseManager} from './baseManager';
-import PushServer = require('../server/pushServer');
+import PushManager = require('./pushManager');
 import MessageServer = require("../server/messageServer");
 import {Message} from '../model/innerModel/message'
 
@@ -12,8 +12,11 @@ class MessageManager extends BaseManager {
 			let msgInfo = JSON.parse(req.body);
 			let message = new Message(msgInfo);
 			let result = await MessageServer.save(message);
+			// push message
+			let pushResult = await PushManager.sendMessagePush(message.from,message.content,req.user.username);
 			
-			res.send(result);
+						
+			res.send(this.baseResponse(pushResult));
 		}catch(e){
 			console.log(e);
 			res.json(e);

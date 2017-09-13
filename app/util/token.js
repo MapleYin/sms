@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const JsonWebTokenValidate = require("express-jwt");
 const JsonWebToken = require("jsonwebtoken");
-const NodeCache = require("./cache");
+const UserInfoCache = require("./cache");
 const UserServer = require("../server/userServer");
 let EXPIRES = '100d';
 // header 
@@ -11,11 +11,13 @@ let options = {
     secret: (req, payload, done) => {
         var secret;
         var ip;
-        if (payload && payload.username) {
-            let userInfo = NodeCache.get(payload.username);
-            if (userInfo && userInfo.secret) {
-                secret = userInfo.secret;
-            }
+        if (!payload || !payload.username) {
+            done("No username Found!", null);
+            return;
+        }
+        let userInfo = UserInfoCache.get(payload.username);
+        if (userInfo && userInfo.secret) {
+            secret = userInfo.secret;
         }
         if (secret) {
             done(null, secret);
@@ -42,7 +44,7 @@ let options = {
 };
 exports.ValidateExpress = JsonWebTokenValidate(options);
 function CreateToken(username, secret) {
-    NodeCache.set(username, {
+    UserInfoCache.set(username, {
         secret: secret,
     });
     return JsonWebToken.sign({ username: username }, secret, {

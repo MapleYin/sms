@@ -38,10 +38,32 @@ describe('Api Router', function () {
             done(e);
         });
     });
-    it('GET /api/testToken', (done) => {
+    let pushToken = "D36908BC2A4D9DC67A7CB200F42A6693D90F9FC37D7F30EF8D7D68E3660CC0D3";
+    //{"pushToken":"D36908BC2A4D9DC67A7CB200F42A6693D90F9FC37D7F30EF8D7D68E3660CC0D3"}
+    it('POST /api/user/init should be right', (done) => {
         supertest(index_1.app)
-            .get('/api/testToken')
-            .set('authorization', 'Bearer ' + token)
+            .post('/api/user/init')
+            .set({
+            'authorization': 'Bearer ' + token,
+            'Content-Type': 'application/octet-stream'
+        })
+            .send('8Det7zhVAS2XqzsnXpg+PQ2xehAsgxlr6xoq8U7fdpGUHdQe4hGZuE7hxapoJ83RZiMhYuf3BK8LNKMPTAmc6KGfQQdC9smEnICKfKzjL/vtxAX0iHfG2uDdbCbGJjg4')
+            .then((res) => {
+            done();
+        }).catch((e) => {
+            done(e);
+        });
+    });
+    //{"title":"test title","subtitle":"test subtitle","body":"test body test body test body test body"}
+    it('POST /api/message/receive should be right', (done) => {
+        this.timeout(5000);
+        supertest(index_1.app)
+            .post('/api/message/receive')
+            .set({
+            'authorization': 'Bearer ' + token,
+            'Content-Type': 'application/octet-stream'
+        })
+            .send('zM8ga9mYCyaFsnUpKe70rxKzKIoqgojXD1ZCYAlOrys7/eyMip5UfUxs50Bf4ahWKQSCUHmRwUMzlhoA1AMRYUEcZzAHwo5dYQxrLdct46tsWk9Z4Cc2wFpXRMIhW9RL')
             .then((res) => {
             done();
         }).catch((e) => {

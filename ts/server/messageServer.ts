@@ -1,7 +1,7 @@
 import {BaseServer} from "./baseServer"
 import * as Helper from '../util/helper'
 import {Message} from '../model/innerModel/message'
-
+import {QueryError, RowDataPacket,OkPacket} from 'mysql';
 interface MessageQueryParams {
 	page? : number;
 	offset? : number;
@@ -46,7 +46,7 @@ class MessageServer extends BaseServer {
 		return result;
 	}
 
-	async save(message:Message){
+	async save(message:Message):Promise<OkPacket>{
 		let SQLString = `
 		    INSERT 
 		    INTO message (\`from\`,
@@ -54,14 +54,8 @@ class MessageServer extends BaseServer {
 		    			timeInterval,
 		    			\`to\`
 		    			) 
-		    VALUES (
-			    '${message.from}',
-			    '${message.content}',
-			    ${message.timeInterval},
-			    '${message.to}'
-		    )`;
-
-		let result = await this.query(SQLString);
+		    VALUES (?,?,?,?)`;
+		let result = await this.query(SQLString,[message.from,message.content,message.timeInterval,message.to]);
 
 		return result;
 	}
