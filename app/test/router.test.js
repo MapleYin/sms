@@ -32,7 +32,9 @@ describe('Api Router', function () {
             .set('Content-Type', 'application/octet-stream')
             .send('9EDygQ/b05Z+w0CCOP0BXl+PPhdwUIAHWC+YWOdJv0km2zy9pbv87dplNlKZDwr9O1f6rElyw+7t9EWVS2Gjfw==')
             .then((res) => {
-            token = Crypt.RequestDataDecode(res.text);
+            let result = JSON.parse(Crypt.RequestDataDecode(res.text));
+            token = result.data;
+            console.log("token: " + token);
             done();
         }).catch((e) => {
             done(e);
@@ -68,6 +70,18 @@ describe('Api Router', function () {
             done();
         }).catch((e) => {
             done(e);
+        });
+    });
+    it('GET /api/message/fetch', (done) => {
+        supertest(index_1.app)
+            .get('/api/message/fetch')
+            .set({
+            'authorization': 'Bearer ' + token,
+            'Content-Type': 'application/octet-stream'
+        })
+            .then((res) => {
+            console.log(Crypt.RequestDataDecode(res.text));
+            done();
         });
     });
 });

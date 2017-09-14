@@ -26,7 +26,7 @@ class MessageManager extends BaseManager {
 	fetch:express.RequestHandler = async (req,res,next) => {
 		let query = req.query;
 		try{
-			let result = await MessageServer
+			let result = await MessageServer.get();
 			res.send(result);
 		}catch(e){
 			console.log(e);
