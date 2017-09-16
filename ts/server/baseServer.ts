@@ -1,28 +1,35 @@
 import DBPool = require("../db/db");
 import {createConnection, QueryError, RowDataPacket,OkPacket} from 'mysql';
-export class BaseServer{
 
-	protected select<T>() : Promise<T[]> {
-		return this.query("");
+export class BaseServer {
+
+	// TODO
+	protected select<T>(tableName:string,condition?:string[])
+	protected select<T>(tableName:string,fields?:string[],condition?:string[]) {
+		return this.query<Array<T>>("SELECT * FROM ?? WHERE",[tableName]);
 	}
 
-	protected selectOne<T>() : Promise<T> {
-		return this.query("").then((result:any[])=>{
+	// TODO
+	protected selectOne<T>() {
+		return this.query<Array<T>>("").then((result) => {
 			return result.shift();
 		});
 	}
 
-	protected insert() : Promise<OkPacket> {
-		return this.query("");
+	protected insert(tableName:string,data:{[key:string]:string|number|boolean}) {
+		var SQLString = `INSERT INTO ?? SET ?`
+		return this.query<OkPacket>(SQLString,[tableName,data]);
 	}
 
-	protected update() : Promise<OkPacket> {
-		return this.query("");
+	// TODO
+	protected update() {
+		return this.query<OkPacket>("");
 	}
 
-	protected query(queryString:string,params?:any):Promise<any>{
+
+	protected query<T>(queryString:string,params?:any):Promise<T>{
 		return new Promise(function(resolve,reject){
-			DBPool.query(queryString,params,function(error,result,fields){
+			DBPool.query(queryString,params,function(error,result,fields) {
 				if(!error) {
 					resolve(result);
 				}else{
@@ -32,8 +39,6 @@ export class BaseServer{
 		});
 	}
 }
-
-
 
 /*
 error :

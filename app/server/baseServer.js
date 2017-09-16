@@ -2,16 +2,17 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const DBPool = require("../db/db");
 class BaseServer {
-    select() {
-        return this.query("");
+    select(tableName, fields, condition) {
+        return this.query("SELECT * FROM ?? WHERE", [tableName]);
     }
     selectOne() {
         return this.query("").then((result) => {
             return result.shift();
         });
     }
-    insert() {
-        return this.query("");
+    insert(tableName, data) {
+        var SQLString = `INSERT INTO ?? SET ?`;
+        return this.query(SQLString, [tableName, data]);
     }
     update() {
         return this.query("");

@@ -33,15 +33,12 @@ class MessageServer extends baseServer_1.BaseServer {
         return result;
     }
     async save(message) {
-        let SQLString = `
-		    INSERT 
-		    INTO message (\`from\`,
-		    			content,
-		    			timeInterval,
-		    			\`to\`
-		    			) 
-		    VALUES (?,?,?,?)`;
-        let result = await this.query(SQLString, [message.from, message.content, message.timeInterval, message.to]);
+        let result = this.insert('message', {
+            'from': message.from,
+            'content': message.content,
+            'timeInterval': message.timeInterval,
+            'to': message.to,
+        });
         return result;
     }
 }

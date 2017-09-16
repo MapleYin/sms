@@ -26,7 +26,7 @@ class UserServer extends baseServer_1.BaseServer {
     async userRegist(username, password) {
         password = CryptoJS.SHA256(password).toString();
         let secret = Helper.RandomString(32);
-        let result = await this.query('INSERT INTO user SET ?', {
+        let result = await this.insert('user', {
             "username": username,
             "password": password,
             "userId": CryptoJS.MD5(username + secret),

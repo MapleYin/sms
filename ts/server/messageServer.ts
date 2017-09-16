@@ -11,7 +11,7 @@ interface MessageQueryParams {
 
 class MessageServer extends BaseServer {
 
-	async get(query:MessageQueryParams = {}):Promise<Array<Message>>{
+	async get(query:MessageQueryParams = {}) {
 		var isValidParams = true
 
 		var SQLArray = [];
@@ -42,20 +42,17 @@ class MessageServer extends BaseServer {
 		SQLArray.push(conditions.join(' ')||"1");
 		SQLArray.push(limits.join(','));
 
-		let result = await this.query(SQLArray.join(' '));
+		let result = await this.query<Array<Message>>(SQLArray.join(' '));
 		return result;
 	}
 
 	async save(message:Message):Promise<OkPacket>{
-		let SQLString = `
-		    INSERT 
-		    INTO message (\`from\`,
-		    			content,
-		    			timeInterval,
-		    			\`to\`
-		    			) 
-		    VALUES (?,?,?,?)`;
-		let result = await this.query(SQLString,[message.from,message.content,message.timeInterval,message.to]);
+		let result = this.insert('message',{
+			'from' : message.from,
+			'content' : message.content,
+			'timeInterval' : message.timeInterval,
+			'to' : message.to,
+		});
 
 		return result;
 	}

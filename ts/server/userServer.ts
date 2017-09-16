@@ -31,7 +31,7 @@ class UserServer extends BaseServer{
 	async userRegist(username:string,password:string) {
 		password = CryptoJS.SHA256(password).toString();
 		let secret = Helper.RandomString(32);
-		let result = await this.query('INSERT INTO user SET ?',{
+		let result = await this.insert('user', {
 			"username" : username,
 			"password" : password,
 			"userId" : CryptoJS.MD5(username+secret), 
@@ -47,7 +47,7 @@ class UserServer extends BaseServer{
 
 	// Private ============================================================
 
-	private async findBy(params:string|[string],value:(string|number)|[string|number],limit?:number):Promise<Array<User>> {
+	private async findBy(params:string|[string],value:(string|number)|[string|number],limit?:number) {
 		var matchParams:string;
 		if (Array.isArray(params) && Array.isArray(value)) {
 			let paramsArray = params as Array<string>;
@@ -60,7 +60,7 @@ class UserServer extends BaseServer{
 			throw "Error Params or Value";
 			
 		}
-		let result = await this.query(`SELECT *,UNIX_TIMESTAMP(date) as date FROM user WHERE ${matchParams}`,value);
+		let result = await this.query<Array<User>>(`SELECT *,UNIX_TIMESTAMP(date) as date FROM user WHERE ${matchParams}`,value);
 		return result;
 	}
 }
