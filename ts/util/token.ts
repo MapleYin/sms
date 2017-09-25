@@ -27,7 +27,7 @@ let options = {
 		if(secret) {
 			done(null,secret);
 		}else{
-			let result = UserServer.findByUserName(payload.username);
+			let result = UserServer.findById(payload.username);
 			result.then((result)=>{
 				if(result && result.length > 0) {
 					let userInfo = result[0];
