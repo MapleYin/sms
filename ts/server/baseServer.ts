@@ -1,6 +1,9 @@
 import DBPool = require("../db/db");
 import {createConnection, QueryError, RowDataPacket,OkPacket} from 'mysql';
 
+
+type QueryResult = OkPacket | RowDataPacket[] | RowDataPacket[][] | OkPacket[] | any[];
+
 export class BaseServer {
 
 	// TODO
@@ -27,9 +30,9 @@ export class BaseServer {
 	}
 
 
-	protected query<T>(queryString:string,params?:any):Promise<T>{
+	protected query<T extends QueryResult>(queryString:string,params?:any):Promise<T>{
 		return new Promise(function(resolve,reject){
-			DBPool.query(queryString,params,function(error,result,fields) {
+			DBPool.query<T>(queryString,params,function(error,result,fields) {
 				if(!error) {
 					resolve(result);
 				}else{

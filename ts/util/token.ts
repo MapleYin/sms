@@ -31,13 +31,17 @@ let options = {
 			result.then((result)=>{
 				if(result && result.length > 0) {
 					let userInfo = result[0];
-					secret = userInfo.secret
+					secret = userInfo.secret;
+					UserInfoCache.set(payload.username,{
+						secret : secret,
+					});
 					done(null,secret);
 				}else{
 					done("No Secret Found!",null);
 				}
 			}).catch((reason)=>{
-				done("No Secret Found!",null);
+				console.log(reason);
+				done(reason,null);
 			});
 		}	
 	},
