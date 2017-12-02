@@ -27,7 +27,7 @@ class MessageManager extends BaseManager {
 		let query = req.query;
 		try{
 			let result = await MessageServer.get();
-			res.send(result);
+			res.send(this.listResponse(result));
 		}catch(e){
 			console.log(e);
 			res.json(e);
