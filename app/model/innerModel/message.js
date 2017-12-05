@@ -6,7 +6,6 @@ class Message {
         this.timeInterval = messageInfo.timeInterval || "";
         this.from = messageInfo.from || "";
         this.to = messageInfo.to || "";
-        return this;
     }
 }
 exports.Message = Message;

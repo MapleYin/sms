@@ -16,6 +16,7 @@ class MessageServer extends BaseServer {
 
 		var SQLArray = [];
 		SQLArray.push(`SELECT 
+			id,
 			content,
 			timeInterval,
 			\`from\`,

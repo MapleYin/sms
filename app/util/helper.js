@@ -1,5 +1,5 @@
-// check
 "use strict";
+// check
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.isNumber = (maybeNumber) => {
     return typeof maybeNumber == 'number';

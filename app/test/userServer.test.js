@@ -73,6 +73,21 @@ describe("UserServer", () => {
             done(error.message);
         });
     });
+    it("#findById() Should Be Right", (done) => {
+        UserServer.findById(userId).then((result) => {
+            if (result.length > 0) {
+                let userInfo = result[0];
+                assert.equal(userInfo.username, user1.username);
+                console.log(userInfo);
+                done();
+            }
+            else {
+                done(`find No userId ${userId}`);
+            }
+        }).catch((error) => {
+            done(error.message);
+        });
+    });
     it("#updatePushToken() Should Be Right", (done) => {
         UserServer.updatePushToken(pushToken, userId).then((result) => {
             done();

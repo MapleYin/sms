@@ -1,3 +1,4 @@
+import * as express from "express";
 import {BaseResponse,ListResponse,StatusCode,StatusMessage} from "./defined"
 export * from "./defined"
 export class BaseManager {
@@ -22,6 +23,17 @@ export class BaseManager {
 			code : errorCode,
 			message : message || StatusMessage[errorCode],
 			data : null
+		}
+	}
+
+
+	protected send(sendBlock:(req:express.Request)=>any):express.RequestHandler {
+		return (req,res,next)=>{
+			try {
+				res.send(sendBlock(req));
+			} catch(e) {
+				res.json(e);
+			}
 		}
 	}
 }

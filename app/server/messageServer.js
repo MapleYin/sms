@@ -5,6 +5,7 @@ class MessageServer extends baseServer_1.BaseServer {
         var isValidParams = true;
         var SQLArray = [];
         SQLArray.push(`SELECT 
+			id,
 			content,
 			timeInterval,
 			\`from\`,

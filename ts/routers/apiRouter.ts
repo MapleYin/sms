@@ -7,6 +7,7 @@ import * as Helper from '../util/helper'
 
 import MessageManager = require("../manager/messageManager");
 import UserManager = require("../manager/userManager");
+import SenderManager = require("../manager/senderManager");
 
 
 let crypt:Express.RequestHandler = (req,res,next)=>{
@@ -49,7 +50,11 @@ export = function(router:Express.Router) {
 
 	// message
 	router.post('/api/message/receive',ValidateExpress,MessageManager.save);
-	router.get('/api/message/fetch',ValidateExpress,MessageManager.fetch);
+	router.get('/api/message/fetch',ValidateExpress,MessageManager.get);
+
+	// sender
+	router.post('/api/sender/create',ValidateExpress,SenderManager.save);
+	router.post('/api/sender/update',ValidateExpress,SenderManager.update);
 	
 
 	

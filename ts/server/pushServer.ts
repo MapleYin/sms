@@ -32,6 +32,7 @@ class PushServer {
 
 	sendPush(payload:PushPayload,userToken:string[]|string) {
 		this.currentPushPayload = new Apn.Notification();
+		this.currentPushPayload.mutableContent = true;
 		this.currentPushPayload.alert = payload;
 		let result = this.apnProvider.send(this.currentPushPayload,userToken);
 		return result;

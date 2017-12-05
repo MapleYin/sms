@@ -5,6 +5,7 @@ class BaseServer {
     select(tableName, fields, condition) {
         return this.query("SELECT * FROM ?? WHERE", [tableName]);
     }
+    // TODO
     selectOne() {
         return this.query("").then((result) => {
             return result.shift();
@@ -14,6 +15,7 @@ class BaseServer {
         var SQLString = `INSERT INTO ?? SET ?`;
         return this.query(SQLString, [tableName, data]);
     }
+    // TODO
     update() {
         return this.query("");
     }
