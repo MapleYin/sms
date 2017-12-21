@@ -28,10 +28,11 @@ export class BaseManager {
 
 
 	protected send(sendBlock:(req:express.Request)=>any):express.RequestHandler {
-		return (req,res,next)=>{
+		return async (req,res,next)=>{
 			try {
-				res.send(sendBlock(req));
+				res.send(await sendBlock(req));
 			} catch(e) {
+				console.log(e);
 				res.json(e);
 			}
 		}

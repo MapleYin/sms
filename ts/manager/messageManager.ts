@@ -28,8 +28,6 @@ class MessageManager extends BaseManager {
 		}
 		return this.listResponse(result);
 	});
-
-	
 }
 
 
