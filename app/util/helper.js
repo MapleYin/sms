@@ -40,3 +40,26 @@ function RandomString(length) {
     return charArray.join('');
 }
 exports.RandomString = RandomString;
+var TimeNumberType;
+(function (TimeNumberType) {
+    TimeNumberType[TimeNumberType["second"] = 0] = "second";
+    TimeNumberType[TimeNumberType["millisecond"] = 1] = "millisecond";
+})(TimeNumberType || (TimeNumberType = {}));
+class TimeMaker {
+    constructor(date = new Date()) {
+        this.originDate = date;
+    }
+    toTimeNumber(type) {
+        // switch (type) {
+        // 	case TimeNumberType.second:
+        // 		return ~~(this.originDate.getTime()/1000);
+        // 		break;
+        // 	case TimeNumberType.millisecond:
+        // 		return this.originDate.getTime();
+        // 		break;
+        // 	default:
+        // 		// code...
+        // 		break;
+        // }
+    }
+}

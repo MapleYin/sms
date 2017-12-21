@@ -10,10 +10,10 @@ interface ISender {
 
 
 export class Sender implements ISender {
-	id:number;
+	id : number;
 	name : string;
 	headimage? : string;
-	lastcontent: string;
+	lastcontent : string;
 	lastupdate : number;
 	readstatus : boolean;
 	createtime : number;

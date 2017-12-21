@@ -19,6 +19,11 @@ export class BaseServer {
 		});
 	}
 
+	protected insertOrUpdate(tableName:string,data:{[key:string]:string|number|boolean}) {
+		var SQLString = `INSERT INTO ?? SET ? ON DUPLICATE KEY UPDATE ?`;
+		return this.query<OkPacket>(SQLString,[tableName,data,data]);
+	}
+
 	protected insert(tableName:string,data:{[key:string]:string|number|boolean}) {
 		var SQLString = `INSERT INTO ?? SET ?`
 		return this.query<OkPacket>(SQLString,[tableName,data]);

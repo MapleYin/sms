@@ -27,5 +27,15 @@ class BaseManager {
             data: null
         };
     }
+    send(sendBlock) {
+        return (req, res, next) => {
+            try {
+                res.send(sendBlock(req));
+            }
+            catch (e) {
+                res.json(e);
+            }
+        };
+    }
 }
 exports.BaseManager = BaseManager;

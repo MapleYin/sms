@@ -11,6 +11,10 @@ class BaseServer {
             return result.shift();
         });
     }
+    insertOrUpdate(tableName, data) {
+        var SQLString = `INSERT INTO ?? SET ? ON DUPLICATE KEY UPDATE ?`;
+        return this.query(SQLString, [tableName, data, data]);
+    }
     insert(tableName, data) {
         var SQLString = `INSERT INTO ?? SET ?`;
         return this.query(SQLString, [tableName, data]);

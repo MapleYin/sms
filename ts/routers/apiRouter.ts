@@ -53,7 +53,6 @@ export = function(router:Express.Router) {
 	router.get('/api/message/fetch',ValidateExpress,MessageManager.get);
 
 	// sender
-	router.post('/api/sender/create',ValidateExpress,SenderManager.save);
 	router.post('/api/sender/update',ValidateExpress,SenderManager.update);
 	
 

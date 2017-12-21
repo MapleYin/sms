@@ -50,7 +50,35 @@ export function RandomString(length:number):string {
 	return charArray.join('');
 }
 
+enum TimeNumberType {
+	second,
+	millisecond
+}
 
+class TimeMaker {
+
+	private originDate:Date;
+
+
+	constructor(date:Date = new Date()) {
+		this.originDate = date;
+	}
+
+	toTimeNumber(type:TimeNumberType) {
+		// switch (type) {
+		// 	case TimeNumberType.second:
+		// 		return ~~(this.originDate.getTime()/1000);
+		// 		break;
+		// 	case TimeNumberType.millisecond:
+		// 		return this.originDate.getTime();
+		// 		break;
+		// 	default:
+		// 		// code...
+		// 		break;
+		// }
+	}
+
+}
 
 
 

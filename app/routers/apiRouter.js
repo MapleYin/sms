@@ -4,6 +4,7 @@ const token_1 = require("../util/token");
 const Helper = require("../util/helper");
 const MessageManager = require("../manager/messageManager");
 const UserManager = require("../manager/userManager");
+const SenderManager = require("../manager/senderManager");
 let crypt = (req, res, next) => {
     try {
         req.body = Crypt.RequestDataDecode(req.body.toString());
@@ -37,7 +38,9 @@ module.exports = function (router) {
     router.post('/api/user/init', token_1.ValidateExpress, UserManager.init);
     // message
     router.post('/api/message/receive', token_1.ValidateExpress, MessageManager.save);
-    router.get('/api/message/fetch', token_1.ValidateExpress, MessageManager.fetch);
+    router.get('/api/message/fetch', token_1.ValidateExpress, MessageManager.get);
+    // sender
+    router.post('/api/sender/update', token_1.ValidateExpress, SenderManager.update);
     router.all('*', (req, res) => {
         res.sendStatus(404);
     });
