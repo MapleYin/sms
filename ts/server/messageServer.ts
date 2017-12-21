@@ -46,17 +46,9 @@ class MessageServer extends BaseServer {
 	}
 
 	async save(message:Message):Promise<OkPacket> {
-		let senderName = this.fetchSender(message.content,message.from);
 
-		let send = new Sender({
-			name : senderName
-		});
-
-		let senderSaveResult = await SenderServer.saveOrUpdate(send);
-		let senderResult = await SenderServer.get(send.name);
 		let result = this.insert('message',{
 			'from' : message.from,
-			'sender_id' : senderResult.id,
 			'content' : message.content,
 			'timeInterval' : message.timeInterval,
 			'to' : message.to,
