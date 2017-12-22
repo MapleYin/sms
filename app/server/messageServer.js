@@ -24,7 +24,7 @@ class MessageServer extends baseServer_1.BaseServer {
         let sqlString = `SELECT * 
 		    FROM message 
 		    WHERE \`from\` = ${from}
-		    ORDER BY \`timeInterval \`
+		    ORDER BY \`timeInterval\`
 		    DESC
 		    LIMIT ${offset * count},${count}`;
         let result = await this.query(sqlString);
